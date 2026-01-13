@@ -1096,7 +1096,7 @@
         <div class="logo-section" onclick="triggerAdmin()">
             <div class="logo">DP</div>
             <div class="logo-text">
-                <div class="logo-name" id="site-logo-name">Daini Peculiar Ayomide</div>
+                <div class="logo-name" id="site-logo-name" id="title">Daini Peculiar Ayomide</div>
                 <div class="logo-title" id="header-typed"></div>
             </div>
         </div>
@@ -1133,7 +1133,7 @@
 
     <!-- About Section -->
     <section id="about">
-        <div class="about-content">
+        <div class="about-content" id="about">
             <div class="about-image animate-text" id="about-image-container">
                  <img class="pot" id="about-img-display" src="pot3.jpg" alt="Profile">
             </div>
@@ -1150,7 +1150,7 @@
     <!-- Skills Section -->
     <section id="skills">
         <div class="skills-container">
-            <div class="section-header animate-text">
+            <div class="section-header animate-text" id="skills">
                 <h2 id="skills-header-title" class="animate-text">My Skills</h2>
                 <p id="skills-header-desc" class="animate-text">Technologies and strengths I use to build reliable digital products.</p>
             </div>
@@ -2082,5 +2082,16 @@
             initParticles();
         });
     </script>
+    <script>
+        fetch("http://127.0.0.1:5000/data")
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(item => {
+            const el = document.getElementById(item.key);
+            if (el) el.innerText = item.value;
+            });
+        });
+    </script>
+
 </body>
 </html>
