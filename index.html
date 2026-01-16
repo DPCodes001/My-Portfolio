@@ -1,2097 +1,1218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DPCs - Daini Peculiar Ayomide | Full-Stack Developer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #121212;
-            --bg-card: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --transition: all 0.3s ease;
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: var(--transition);
-            overflow-x: hidden;
-        }
-
-        /* Header/Navbar */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--bg-secondary);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: var(--transition);
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .logo-title {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: var(--transition);
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .theme-toggle {
-            background: var(--bg-card);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            color: var(--text-primary);
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(20deg) scale(1.1);
-        }
-
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        /* Sections */
-        section {
-            min-height: 100vh;
-            padding: 100px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Hero Section */
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
-        }
-
-        .hero-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 2rem;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .typing-text {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            min-height: 80px;
-        }
-
-        .typing-text .typed-cursor {
-            color: var(--accent);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-secondary:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* About Section */
-        .about-content {
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .pot {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-
-        .about-image {
-            width: 100%;
-            max-width: 400px;
-            aspect-ratio: 1;
-            border-radius: 20px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            color: white;
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-            overflow: hidden;
-        }
-
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-text p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        /* Skills Section */
-        .skills-container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-card {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: var(--transition);
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            border-color: var(--accent);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
-        }
-
-        .skill-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .skill-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* Projects Section */
-        .projects-container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: var(--transition);
-            cursor: pointer;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 200px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: white;
-            overflow: hidden;
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .project-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-content p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: auto;
-        }
-
-        .project-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: var(--transition);
-        }
-
-        .project-link:hover {
-            color: var(--accent-hover);
-        }
-
-        /* Services Section */
-        .services-container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 15px;
-            transition: var(--transition);
-            border-left: 4px solid var(--accent);
-        }
-
-        .service-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-        }
-
-        .service-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .service-card p {
-            color: var(--text-secondary);
-        }
-
-        /* Contact Section */
-        .contact-container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .contact-form {
-            background: var(--bg-card);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.9rem;
-            border-radius: 10px;
-            border: 2px solid var(--bg-secondary);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .success-message {
-            background: #10b981;
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Footer */
-        footer {
-            background: var(--bg-secondary);
-            padding: 2rem 5%;
-            text-align: center;
-        }
-
-        footer h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        footer p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            background: var(--accent);
-            color: white;
-            transform: translateY(-5px);
-        }
-
-        /* --- ADMIN PANEL STYLES --- */
-        #admin-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            overflow-y: auto;
-            backdrop-filter: blur(5px);
-        }
-
-        .admin-container {
-            max-width: 1000px;
-            margin: 50px auto;
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .admin-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--text-primary);
-        }
-
-        .admin-login-screen {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-
-        .admin-login-screen h2 {
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-
-        .admin-dashboard {
-            display: none;
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--text-secondary);
-        }
-
-        .admin-tab-btn {
-            padding: 0.8rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            white-space: nowrap;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .admin-tab-btn.active {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .admin-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .admin-form-row {
-            margin-bottom: 1.5rem;
-        }
-
-        .admin-form-row label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .admin-input, .admin-textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #222;
-            color: #fff;
-            font-family: inherit;
-        }
-
-        .admin-textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .admin-btn-save {
-            background: var(--accent);
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .admin-item-card {
-            background: #222;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-item-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-delete {
-            background: #ef4444;
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-edit {
-            background: var(--accent);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .admin-cred-hint {
-            margin-top: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* --- ENHANCEMENT STYLES --- */
-        /* Cursor follower */
-        #cursor-follower {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent);
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
-        }
-
-        /* Scroll to top button */
-        #scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        #scroll-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        #scroll-top:hover {
-            transform: translateY(-5px) scale(1.1);
-            background: var(--accent-hover);
-        }
-
-        /* Scroll progress bar */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: var(--accent);
-            width: 0%;
-            z-index: 9999;
-            transition: width 0.1s ease;
-        }
-
-        /* Accent color control */
-        #accent-control {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-        #accent-control:hover {
-            transform: rotate(20deg) scale(1.1);
-        }
-
-        /* Command palette */
-        #command-palette {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 90%;
-            max-width: 600px;
-            background: var(--bg-card);
-            border-radius: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #command-palette.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .palette-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--bg-secondary);
-        }
-
-        .palette-header h3 {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-
-        .palette-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .palette-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .palette-results {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .palette-item {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .palette-item:hover, .palette-item.active {
-            background: var(--bg-secondary);
-        }
-
-        .palette-item i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .overlay.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Particles background */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-
-        /* First visit intro */
-        #intro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-            opacity: 1;
-            transition: opacity 1s ease;
-        }
-
-        #intro-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .intro-content {
-            text-align: center;
-            max-width: 600px;
-            padding: 2rem;
-        }
-
-        .intro-logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 2rem;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 2rem;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .intro-text {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .intro-subtext {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-        }
-
-        /* Text animations */
-        .animate-text {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        .animate-text.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: var(--bg-secondary);
-                flex-direction: column;
-                padding: 2rem;
-                transition: var(--transition);
-                z-index: 999;
-            }
-
-            nav.active {
-                right: 0;
-            }
-
-            .mobile-toggle {
-                display: block;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .about-image {
-                margin: 0 auto;
-            }
-
-            .typing-text {
-                font-size: 2rem;
-            }
-
-            section {
-                padding: 80px 5%;
-            }
-            
-            #scroll-top, #accent-control {
-                bottom: 20px;
-                right: 20px;
-                left: auto;
-            }
-            
-            #accent-control {
-                bottom: 80px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DPCs Portfolio</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      --accent: #2dd4bf;
+      --accent-2: #6366f1;
+      --accent-3: #22c55e;
+      --glow: rgba(45, 212, 191, 0.25);
+    }
+    html { scroll-behavior: smooth; }
+    .typing-cursor::after { content: '|'; animation: blink 1s infinite; margin-left: 2px; }
+    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+    .admin-overlay { background: rgba(0,0,0,0.7); }
+    .admin-panel { max-height: 85vh; }
+    .admin-tab-active { background: #1f2937; color: #fff; }
+    .admin-input { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; }
+    .admin-card { background: #0b1220; border: 1px solid #1e293b; }
+
+    #scrollProgress {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 20px var(--glow);
+      transition: width 0.2s ease;
+    }
+    .theme-control {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .theme-control button { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .theme-control button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--glow); }
+
+    #cursorDot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent), transparent 60%);
+      box-shadow: 0 0 20px var(--glow);
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      z-index: 60;
+      transition: transform 0.1s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+    #cursorDot.active {
+      transform: translate(-50%, -50%) scale(1.6);
+      background: radial-gradient(circle, var(--accent-2), transparent 60%);
+      box-shadow: 0 0 30px var(--glow);
+    }
+
+    #scrollTopBtn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px var(--glow);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    #scrollTopBtn:hover { transform: translateY(-4px) scale(1.03); }
+
+    .mood-active {
+      background: radial-gradient(circle at top left, rgba(45, 212, 191, 0.08), transparent 55%);
+      box-shadow: inset 0 0 40px rgba(59, 130, 246, 0.08);
+      transition: background 0.6s ease, box-shadow 0.6s ease;
+    }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.reveal-active { opacity: 1; transform: translateY(0); }
+    .floaty { animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+
+    #heroOrb {
+      animation: orbFloat 7s ease-in-out infinite;
+      box-shadow: 0 20px 60px rgba(45, 212, 191, 0.25);
+    }
+    @keyframes orbFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-14px); } }
+
+    #bgCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+    #commandPaletteOverlay { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(8px); }
+    #commandPalette { background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(148, 163, 184, 0.2); }
+    .command-item.active { background: rgba(45, 212, 191, 0.12); border-color: rgba(45, 212, 191, 0.4); }
+
+    #introOverlay {
+      background: radial-gradient(circle at top, rgba(45, 212, 191, 0.2), rgba(15, 23, 42, 0.98));
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    #introOverlay.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    .intro-logo { letter-spacing: 0.4rem; }
+
+    .interactive-hover { box-shadow: 0 15px 30px rgba(15, 23, 42, 0.4); border-color: rgba(45, 212, 191, 0.4); }
+  </style>
 </head>
-<body data-theme="dark">
-    <!-- Intro Animation -->
-    <div id="intro-overlay">
-        <div class="intro-content">
-            <div class="intro-logo">DP</div>
-            <div class="intro-text">Daini Peculiar Ayomide</div>
-            <div class="intro-subtext">Full-Stack Developer</div>
-        </div>
+<body class="bg-slate-950 text-slate-100">
+  <canvas id="bgCanvas"></canvas>
+  <div class="fixed top-0 left-0 w-full h-1 z-50">
+    <div id="scrollProgress" class="h-full w-0"></div>
+  </div>
+  <div id="cursorDot" class="hidden md:block"></div>
+
+  <div id="introOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 text-center">
+    <div class="text-teal-300 text-sm uppercase tracking-[0.4rem]">Welcome</div>
+    <div class="intro-logo text-5xl md:text-6xl font-bold text-white">DPCs</div>
+    <p class="text-slate-300 max-w-md">Crafting scalable, user-focused digital experiences.</p>
+  </div>
+
+  <div id="commandPaletteOverlay" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div id="commandPalette" class="w-[90vw] max-w-2xl rounded-2xl p-4 shadow-2xl">
+      <div class="text-xs uppercase tracking-widest text-slate-400 mb-3">Command Palette</div>
+      <input id="commandInput" type="text" placeholder="Type a command or section..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none" />
+      <div id="commandList" class="mt-4 space-y-2 max-h-72 overflow-y-auto"></div>
+      <p class="mt-4 text-xs text-slate-500">Tip: Press Esc to close. Use ↑ ↓ and Enter to select.</p>
     </div>
+  </div>
 
-    <!-- Particles Background -->
-    <div id="particles-js"></div>
+  <div id="themeControls" class="theme-control fixed bottom-6 right-6 z-40 rounded-2xl p-3 flex flex-col gap-2 text-xs">
+    <button id="themeFreeze" class="px-3 py-2 rounded-lg bg-slate-950/80 text-slate-200">Freeze Theme</button>
+    <button id="themeReset" class="px-3 py-2 rounded-lg bg-slate-950/80 text-slate-200">Reset Colors</button>
+    <button id="cursorToggle" class="px-3 py-2 rounded-lg bg-slate-950/80 text-slate-200">Disable Cursor Dot</button>
+  </div>
 
-    <!-- Scroll Progress Bar -->
-    <div id="scroll-progress"></div>
+  <button id="scrollTopBtn" class="fixed bottom-6 right-28 hidden z-40 px-4 py-3 rounded-full text-slate-950 font-semibold">↑</button>
 
-    <!-- Cursor Follower -->
-    <div id="cursor-follower"></div>
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur border-b border-slate-800">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div id="logo" class="text-2xl font-bold tracking-wide cursor-pointer">DPCs</div>
+      <div class="hidden md:flex gap-6 text-sm uppercase tracking-wider" id="navMenu">
+        <a href="#home" class="hover:text-teal-400">Home</a>
+        <a href="#about" class="hover:text-teal-400">About</a>
+        <a href="#skills" class="hover:text-teal-400">Skills</a>
+        <a href="#projects" class="hover:text-teal-400">Projects</a>
+        <a href="#services" class="hover:text-teal-400">Services</a>
+        <a href="#contact" class="hover:text-teal-400">Contact</a>
+      </div>
+    </nav>
+  </header>
 
-    <!-- Scroll to Top Button -->
-    <div id="scroll-top">
-        <i class="fas fa-arrow-up"></i>
+  <!-- Hero -->
+  <section id="home" class="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-10 items-center mood-section">
+    <div>
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight reveal">Hi, I'm <span id="heroName" class="text-teal-400">Daini Peculiar Ayomide</span></h1>
+      <p class="text-xl mt-4 text-slate-300 reveal"><span id="typingText" class="typing-cursor"></span></p>
+      <p id="heroSubtitle" class="mt-6 text-slate-400 reveal">I design and develop fast, scalable, and user-focused web applications with clean interfaces and solid backend logic.</p>
+      <div class="mt-8 flex gap-4 reveal">
+        <a id="heroPrimaryBtn" href="#projects" class="px-6 py-3 bg-teal-500 text-slate-950 font-semibold rounded-lg hover:bg-teal-400">View My Work</a>
+        <a id="heroSecondaryBtn" href="#contact" class="px-6 py-3 border border-teal-500 text-teal-300 font-semibold rounded-lg hover:bg-teal-500 hover:text-slate-950">Contact Me</a>
+      </div>
     </div>
-
-    <!-- Accent Color Control -->
-    <div id="accent-control" title="Accent Color Control">
-        <i class="fas fa-palette"></i>
+    <div class="flex justify-center">
+      <div id="heroOrb" class="w-60 h-60 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-5xl font-bold">DPCs</div>
     </div>
+  </section>
 
-    <!-- Command Palette -->
-    <div class="overlay" id="palette-overlay"></div>
-    <div id="command-palette">
-        <div class="palette-header">
-            <h3>Command Palette</h3>
-            <input type="text" class="palette-input" id="palette-search" placeholder="Type a command or search...">
+  <!-- About -->
+  <section id="about" class="max-w-6xl mx-auto px-6 py-20 mood-section">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <img id="aboutImage" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop" alt="About" class="rounded-2xl w-full h-80 object-cover reveal" />
+      <div>
+        <h2 id="aboutTitle" class="text-3xl font-bold mb-4 reveal">About Me</h2>
+        <div id="aboutText" class="text-slate-300 space-y-4 reveal">
+          <p>I’m Daini Peculiar Ayomide, a passionate full-stack developer focused on building modern, responsive, and performance-driven digital products.</p>
+          <p>I specialize in turning ideas into functional software by combining clean code, thoughtful UI/UX design, and scalable backend systems. I enjoy solving problems, learning new technologies, and creating solutions that are both visually appealing and technically sound.</p>
+          <p>My goal is simple: build software that works beautifully and performs efficiently.</p>
         </div>
-        <div class="palette-results" id="palette-results">
-            <!-- Results will be populated here -->
-        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Header -->
-    <header>
-        <div class="logo-section" onclick="triggerAdmin()">
-            <div class="logo">DP</div>
-            <div class="logo-text">
-                <div class="logo-name" id="site-logo-name" id="title">Daini Peculiar Ayomide</div>
-                <div class="logo-title" id="header-typed"></div>
-            </div>
-        </div>
-        <nav id="nav">
-            <a href="#home" onclick="closeMenu()">Home</a>
-            <a href="#about" onclick="closeMenu()">About</a>
-            <a href="#skills" onclick="closeMenu()">Skills</a>
-            <a href="#projects" onclick="closeMenu()">Projects</a>
-            <a href="#services" onclick="closeMenu()">Services</a>
-            <a href="#contact" onclick="closeMenu()">Contact</a>
-        </nav>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <i class="fas fa-moon" id="theme-icon"></i>
-            </button>
-            <button class="mobile-toggle" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </header>
+  <!-- Skills -->
+  <section id="skills" class="max-w-6xl mx-auto px-6 py-20 mood-section">
+    <h2 id="skillsTitle" class="text-3xl font-bold mb-2 reveal">My Skills</h2>
+    <p id="skillsSubtitle" class="text-slate-400 mb-8 reveal">Technologies and strengths I use to build reliable digital products.</p>
+    <div id="skillsGrid" class="grid md:grid-cols-3 gap-6"></div>
+  </section>
 
-    <!-- Hero Section -->
-    <section id="home">
-        <div class="hero-content">
-            <div class="hero-icon" id="hero-logo-icon">DP</div>
-            <div class="typing-text" id="typed"></div>
-            <p class="hero-subtitle animate-text" id="hero-subtitle">I design and develop fast, scalable, and user-focused web applications with clean interfaces and solid backend logic.</p>
-            <div class="cta-buttons">
-                <a href="#projects" class="btn btn-primary animate-text" id="hero-btn-primary">View My Work</a>
-                <a href="#contact" class="btn btn-secondary animate-text" id="hero-btn-secondary">Contact Me</a>
-            </div>
-        </div>
-    </section>
+  <!-- Projects -->
+  <section id="projects" class="max-w-6xl mx-auto px-6 py-20 mood-section">
+    <h2 id="projectsTitle" class="text-3xl font-bold mb-2 reveal">Projects</h2>
+    <p id="projectsSubtitle" class="text-slate-400 mb-8 reveal">A selection of projects that showcase my skills and experience.</p>
+    <div id="projectsGrid" class="grid md:grid-cols-2 gap-6"></div>
+  </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="about-content" id="about">
-            <div class="about-image animate-text" id="about-image-container">
-                 <img class="pot" id="about-img-display" src="pot3.jpg" alt="Profile">
-            </div>
-            <div class="about-text animate-text" id="about-text-content">
-                <h2 id="about-title" class="animate-text">About Me</h2>
-                <div id="about-paragraphs">
-                    <!-- Dynamic paragraphs -->
-                </div>
-                <a href="#contact" class="btn btn-primary animate-text" id="about-cta" style="margin-top: 1rem;">Let's Work Together</a>
-            </div>
-        </div>
-    </section>
+  <!-- Services -->
+  <section id="services" class="max-w-6xl mx-auto px-6 py-20 mood-section">
+    <h2 id="servicesTitle" class="text-3xl font-bold mb-8 reveal">What I Can Build</h2>
+    <div id="servicesGrid" class="grid md:grid-cols-2 gap-6"></div>
+  </section>
 
-    <!-- Skills Section -->
-    <section id="skills">
-        <div class="skills-container">
-            <div class="section-header animate-text" id="skills">
-                <h2 id="skills-header-title" class="animate-text">My Skills</h2>
-                <p id="skills-header-desc" class="animate-text">Technologies and strengths I use to build reliable digital products.</p>
-            </div>
-            <div class="skills-grid" id="skills-grid">
-                <!-- Skills injected here -->
-            </div>
-        </div>
-    </section>
+  <!-- Contact -->
+  <section id="contact" class="max-w-6xl mx-auto px-6 py-20 mood-section">
+    <h2 id="contactTitle" class="text-3xl font-bold mb-2 reveal">Let’s Build Something Together</h2>
+    <p id="contactSubtitle" class="text-slate-400 mb-8 reveal">Have an idea or project in mind? Fill out the form below and let’s get started.</p>
+    <form id="contactForm" class="grid gap-6 md:grid-cols-2 reveal">
+      <div class="md:col-span-2">
+        <label class="block text-sm mb-2">Full Name</label>
+        <input type="text" placeholder="Enter your full name" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm mb-2">Email Address</label>
+        <input type="email" placeholder="Enter your email address" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
+      </div>
+      <div>
+        <label class="block text-sm mb-2">Project Type</label>
+        <select class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
+          <option>Select project type</option>
+          <option>Portfolio Website</option>
+          <option>Business Website</option>
+          <option>Web Application</option>
+          <option>Dashboard</option>
+          <option>School Project</option>
+          <option>Custom Software</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm mb-2">Budget Range</label>
+        <select class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
+          <option>Select budget range</option>
+          <option>$500 – $1,000</option>
+          <option>$1,000 – $1,500</option>
+          <option>$1,500 – $3,000</option>
+          <option>$3,000 – $5,000</option>
+          <option>$5,000 – $10,000+</option>
+        </select>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm mb-2">Message</label>
+        <textarea rows="5" placeholder="Tell me about your project, goals, and expectations." class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700"></textarea>
+      </div>
+      <div class="md:col-span-2">
+        <button type="submit" class="px-6 py-3 bg-teal-500 text-slate-950 font-semibold rounded-lg">Send Message</button>
+      </div>
+      <p id="contactSuccess" class="hidden md:col-span-2 text-teal-400">Thank you for reaching out! I’ll get back to you as soon as possible.</p>
+    </form>
+  </section>
 
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="projects-container">
-            <div class="section-header animate-text">
-                <h2 id="projects-header-title" class="animate-text">Projects</h2>
-                <p id="projects-header-desc" class="animate-text">A selection of projects that showcase my skills and experience.</p>
-            </div>
-            <div class="projects-grid" id="projects-grid">
-                <!-- Projects injected here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services">
-        <div class="services-container">
-            <div class="section-header animate-text">
-                <h2 id="services-header-title" class="animate-text">What I Can Build</h2>
-                <p id="services-header-desc" class="animate-text">Professional services tailored to your needs</p>
-            </div>
-            <div class="services-grid" id="services-grid">
-                <!-- Services injected here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="contact-container">
-            <div class="section-header animate-text">
-                <h2 id="contact-header-title" class="animate-text">Let's Build Something Together</h2>
-                <p id="contact-header-desc" class="animate-text">Have an idea or project in mind? Fill out the form below and let's get started.</p>
-            </div>
-            <form class="contact-form animate-text" id="contactForm">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-                <div class="form-group">
-                    <label for="project-type">Project Type</label>
-                    <select id="project-type" name="project-type" required>
-                        <option value="">Select project type</option>
-                        <option value="portfolio">Portfolio Website</option>
-                        <option value="business">Business Website</option>
-                        <option value="webapp">Web Application</option>
-                        <option value="dashboard">Dashboard</option>
-                        <option value="school">School Project</option>
-                        <option value="custom">Custom Software</option>
-                        <option value="others">Others</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="budget">Budget Range</label>
-                    <select id="budget" name="budget" required>
-                        <option value="">Select budget range</option>
-                        <option value="500-1000">$500 – $1,000</option>
-                        <option value="1000-1500">$1,000 – $1,500</option>
-                        <option value="1500-3000">$1,500 – $3,000</option>
-                        <option value="3000-5000">$3,000 – $5,000</option>
-                        <option value="5000+">$5,000 – $10,000+</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Tell me about your project, goals, and expectations." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" id="contact-submit-btn" style="width: 100%;">Send Message</button>
-                <div class="success-message" id="successMessage">
-                    <i class="fas fa-check-circle"></i> Thank you for reaching out! I'll get back to you as soon as possible.
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <h3 id="footer-logo-text">DPCodes</h3>
-        <p id="footer-tagline">Building scalable and user-focused digital solutions.</p>
-        <div class="social-links" id="social-links-container">
-            <!-- Dynamic Socials -->
-        </div>
-        <p id="footer-copyright">&copy; 2025 Daini Peculiar Ayomide. All rights reserved.</p>
-    </footer>
-
-    <!-- ADMIN PANEL MODAL -->
-    <div id="admin-modal">
-        <div class="admin-container">
-            <span class="admin-close" onclick="closeAdmin()">&times;</span>
-            
-            <!-- Login Screen -->
-            <div id="admin-login-screen" class="admin-login-screen">
-                <h2>Admin Login 🔑</h2>
-                <div class="admin-form-row">
-                    <input type="text" id="admin-user" class="admin-input" placeholder="Username">
-                </div>
-                <div class="admin-form-row">
-                    <input type="password" id="admin-pass" class="admin-input" placeholder="Password">
-                </div>
-                <button class="btn btn-primary" onclick="loginAdmin()">Admin Unlock 🔑</button>
-                <p id="login-error" style="color: #ef4444; margin-top: 1rem; display: none;">Invalid credentials!</p>
-                <div class="admin-cred-hint">
-                    Default Username: admin<br>
-                    Default Password: admin123
-                </div>
-            </div>
-
-            <!-- Dashboard -->
-            <div id="admin-dashboard" class="admin-dashboard">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h2>Admin Dashboard</h2>
-                    <button class="btn-delete" onclick="logoutAdmin()">Logout</button>
-                </div>
-
-                <div class="admin-tabs">
-                    <button class="admin-tab-btn active" onclick="showAdminTab('global')">Global Content</button>
-                    <button class="admin-tab-btn" onclick="showAdminTab('about')">About Section</button>
-                    <button class="admin-tab-btn" onclick="showAdminTab('skills')">Skills</button>
-                    <button class="admin-tab-btn" onclick="showAdminTab('projects')">Projects</button>
-                    <button class="admin-tab-btn" onclick="showAdminTab('services')">Services</button>
-                    <button class="admin-tab-btn" onclick="showAdminTab('auth')">Credentials</button>
-                </div>
-
-                <!-- Tab content sections -->
-                <div id="tab-global" class="admin-section active">
-                    <h3>Hero & Header</h3>
-                    <div class="admin-form-row">
-                        <label>Logo Name (Header)</label>
-                        <input type="text" id="edit-logo-name" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Hero Typing Strings (Comma separated)</label>
-                        <textarea id="edit-hero-strings" class="admin-textarea"></textarea>
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Hero Subtitle</label>
-                        <textarea id="edit-hero-subtitle" class="admin-textarea"></textarea>
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Footer Text</label>
-                        <input type="text" id="edit-footer-text" class="admin-input">
-                    </div>
-                    <button class="admin-btn-save" onclick="saveGlobalContent()">Save Global Content</button>
-                </div>
-
-                <div id="tab-about" class="admin-section">
-                    <h3>About Section</h3>
-                    <div class="admin-form-row">
-                        <label>About Title</label>
-                        <input type="text" id="edit-about-title" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>About Paragraphs (One per line)</label>
-                        <textarea id="edit-about-paragraphs" class="admin-textarea"></textarea>
-                    </div>
-                    <div class="admin-form-row">
-                        <label>About Image URL</label>
-                        <input type="text" id="edit-about-img-url" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Or Upload Image</label>
-                        <input type="file" id="edit-about-img-file" class="admin-input" accept="image/*" onchange="handleFileUpload(event, 'about')">
-                    </div>
-                    <button class="admin-btn-save" onclick="saveAboutContent()">Save About Section</button>
-                </div>
-
-                <div id="tab-skills" class="admin-section">
-                    <h3>Manage Skills</h3>
-                    <div id="admin-skills-list"></div>
-                    <hr style="margin: 2rem 0; border: 0.5px solid #333;">
-                    <h4>Add New Skill</h4>
-                    <div class="admin-form-row">
-                        <label>Skill Title</label>
-                        <input type="text" id="new-skill-title" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Skill Icon Class (FontAwesome e.g., fas fa-code)</label>
-                        <input type="text" id="new-skill-icon" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Description</label>
-                        <textarea id="new-skill-desc" class="admin-textarea"></textarea>
-                    </div>
-                    <button class="admin-btn-save" onclick="addSkill()">Add Skill</button>
-                </div>
-
-                <div id="tab-projects" class="admin-section">
-                    <h3>Manage Projects</h3>
-                    <div id="admin-projects-list"></div>
-                    <hr style="margin: 2rem 0; border: 0.5px solid #333;">
-                    <h4>Add New Project</h4>
-                    <div class="admin-form-row">
-                        <label>Project Title</label>
-                        <input type="text" id="new-project-title" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Description</label>
-                        <textarea id="new-project-desc" class="admin-textarea"></textarea>
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Project Image URL</label>
-                        <input type="text" id="new-project-img-url" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Or Upload Project Image</label>
-                        <input type="file" id="new-project-img-file" class="admin-input" accept="image/*" onchange="handleFileUpload(event, 'project')">
-                        <input type="hidden" id="new-project-img-base64">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Demo Link</label>
-                        <input type="text" id="new-project-demo" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>GitHub Link</label>
-                        <input type="text" id="new-project-github" class="admin-input">
-                    </div>
-                    <button class="admin-btn-save" onclick="addProject()">Add Project</button>
-                </div>
-
-                <div id="tab-services" class="admin-section">
-                    <h3>Manage Services</h3>
-                    <div id="admin-services-list"></div>
-                    <hr style="margin: 2rem 0; border: 0.5px solid #333;">
-                    <h4>Add New Service</h4>
-                    <div class="admin-form-row">
-                        <label>Service Title</label>
-                        <input type="text" id="new-service-title" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>Description</label>
-                        <textarea id="new-service-desc" class="admin-textarea"></textarea>
-                    </div>
-                    <button class="admin-btn-save" onclick="addService()">Add Service</button>
-                </div>
-
-                <div id="tab-auth" class="admin-section">
-                    <h3>Change Admin Credentials</h3>
-                    <div class="admin-form-row">
-                        <label>New Username</label>
-                        <input type="text" id="new-admin-user" class="admin-input">
-                    </div>
-                    <div class="admin-form-row">
-                        <label>New Password</label>
-                        <input type="password" id="new-admin-pass" class="admin-input">
-                    </div>
-                    <button class="admin-btn-save" onclick="updateCredentials()">Update Credentials</button>
-                </div>
-
-            </div>
-        </div>
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-10">
+    <div class="max-w-6xl mx-auto px-6 text-center space-y-3">
+      <div id="footerLogo" class="text-xl font-bold reveal">DPCs</div>
+      <p id="footerTagline" class="text-slate-400 reveal">Building scalable and user-focused digital solutions.</p>
+      <p id="footerCopyright" class="text-slate-500 reveal">© 2025 Daini Peculiar Ayomide. All rights reserved.</p>
     </div>
+  </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        // --- DATA INITIALIZATION & LOCAL STORAGE ---
-        const DEFAULT_DATA = {
-            auth: {
-                username: 'admin',
-                password: 'admin123'
-            },
-            global: {
-                logoName: 'Daini Peculiar Ayomide',
-                heroStrings: [
-                    'Full-Stack Developer',
-                    'Python & Web Application Developer',
-                    'UI/UX-Focused Software Engineer',
-                    'Building Scalable Digital Solutions'
-                ],
-                heroSubtitle: 'I design and develop fast, scalable, and user-focused web applications with clean interfaces and solid backend logic.',
-                footerText: 'Building scalable and user-focused digital solutions.'
-            },
-            about: {
-                title: 'About Me',
-                paragraphs: [
-                    "I'm Daini Peculiar Ayomide, a passionate full-stack developer focused on building modern, responsive, and performance-driven digital products.",
-                    "I specialize in turning ideas into functional software by combining clean code, thoughtful UI/UX design, and scalable backend systems. I enjoy solving problems, learning new technologies, and creating solutions that are both visually appealing and technically sound.",
-                    "My goal is simple: build software that works beautifully and performs efficiently."
-                ],
-                imageUrl: 'https://via.placeholder.com/400x400/3b82f6/ffffff?text=DP'
-            },
-            skills: [
-                { id: 1, title: 'Frontend Development', icon: 'fas fa-code', desc: 'Building responsive and interactive user interfaces using modern web technologies.' },
-                { id: 2, title: 'Backend Development', icon: 'fas fa-server', desc: 'Designing secure and scalable server-side logic and application workflows.' },
-                { id: 3, title: 'Python Development', icon: 'fab fa-python', desc: 'Developing automation tools, web apps, and data-driven solutions with Python.' },
-                { id: 4, title: 'Streamlit Applications', icon: 'fas fa-chart-line', desc: 'Creating fast, interactive dashboards and tools for real-world use cases.' },
-                { id: 5, title: 'UI / UX Design', icon: 'fas fa-paint-brush', desc: 'Designing clean, intuitive, and user-friendly interfaces with strong visual hierarchy.' },
-                { id: 6, title: 'Problem Solving & Logic', icon: 'fas fa-brain', desc: 'Breaking down complex problems into efficient and maintainable solutions.' }
-            ],
-            projects: [
-                { id: 1, title: 'E-Commerce Platform', desc: 'A full-featured online store with payment integration, product management, and user authentication.', img: '', demo: '#', github: '#' },
-                { id: 2, title: 'Analytics Dashboard', desc: 'Real-time data visualization dashboard with interactive charts and custom reporting features.', img: '', demo: '#', github: '#' },
-                { id: 3, title: 'Task Management App', desc: 'Collaborative task manager with real-time updates, team features, and priority management.', img: '', demo: '#', github: '#' }
-            ],
-            services: [
-                { id: 1, title: 'Portfolio Websites', desc: 'Personal and professional portfolios tailored to showcase skills and projects.' },
-                { id: 2, title: 'Business Websites', desc: 'Clean, responsive websites for brands, startups, and organizations.' },
-                { id: 3, title: 'Web Applications', desc: 'Dynamic web apps with strong backend logic and interactive frontends.' },
-                { id: 4, title: 'Dashboards & Tools', desc: 'Custom dashboards for data visualization, automation, and analytics.' },
-                { id: 5, title: 'Custom Software Solutions', desc: 'Tailored software built to solve specific problems or workflows.' },
-                { id: 6, title: 'Others', desc: 'Have a unique idea or custom requirement? Describe your project and i\'ll build a solution tailored to your needs.' }
-            ]
-        };
+  <!-- Admin Modal -->
+  <div id="adminOverlay" class="fixed inset-0 hidden items-center justify-center admin-overlay z-50">
+    <div class="admin-panel w-[95vw] max-w-5xl bg-slate-900 text-slate-100 rounded-2xl shadow-2xl p-6 overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">Admin Panel</h3>
+        <button id="adminClose" class="text-slate-400 hover:text-white">Close ✕</button>
+      </div>
 
-        let siteData = JSON.parse(localStorage.getItem('portfolioData')) || DEFAULT_DATA;
+      <!-- Login Screen -->
+      <div id="adminLogin" class="space-y-4">
+        <h4 class="text-lg font-semibold">Admin Login</h4>
+        <input id="adminUsername" type="text" placeholder="Username" class="w-full px-4 py-2 rounded-lg admin-input" />
+        <input id="adminPassword" type="password" placeholder="Password" class="w-full px-4 py-2 rounded-lg admin-input" />
+        <button id="adminLoginBtn" class="w-full px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Admin Unlock 🔑</button>
+        <p class="text-sm text-slate-400">Default Username: admin<br/>Default Password: admin123</p>
+        <p id="adminLoginError" class="text-red-400 hidden">Invalid credentials. Try again.</p>
+      </div>
 
-        function saveData() {
-            localStorage.setItem('portfolioData', JSON.stringify(siteData));
-            renderSite();
+      <!-- Dashboard -->
+      <div id="adminDashboard" class="hidden">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button class="admin-tab admin-tab-active px-3 py-2 rounded-lg" data-tab="global">Global Editor</button>
+          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="about">About Manager</button>
+          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="projects">Projects Manager</button>
+          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="skills">Skills Manager</button>
+          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="services">Services Manager</button>
+          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="auth">Change Login</button>
+          <button id="adminLogout" class="ml-auto px-3 py-2 rounded-lg bg-red-500 text-white">Logout</button>
+        </div>
+
+        <div id="tab-global" class="admin-tab-content space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm">Logo Text</label>
+              <input id="globalLogo" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Hero Name</label>
+              <input id="globalHeroName" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="text-sm">Hero Typing Texts (one per line)</label>
+              <textarea id="globalTyping" rows="4" class="w-full px-3 py-2 rounded-lg admin-input"></textarea>
+            </div>
+            <div class="md:col-span-2">
+              <label class="text-sm">Hero Subtitle</label>
+              <textarea id="globalHeroSubtitle" rows="3" class="w-full px-3 py-2 rounded-lg admin-input"></textarea>
+            </div>
+            <div>
+              <label class="text-sm">Primary Button Label</label>
+              <input id="globalPrimaryBtn" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Secondary Button Label</label>
+              <input id="globalSecondaryBtn" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Footer Tagline</label>
+              <input id="globalFooterTagline" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Footer Copyright</label>
+              <input id="globalFooterCopyright" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Section Title: About</label>
+              <input id="globalAboutTitle" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Section Title: Skills</label>
+              <input id="globalSkillsTitle" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Section Title: Projects</label>
+              <input id="globalProjectsTitle" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Section Title: Services</label>
+              <input id="globalServicesTitle" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Section Title: Contact</label>
+              <input id="globalContactTitle" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+          </div>
+          <button id="saveGlobal" class="px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Save Global Changes</button>
+        </div>
+
+        <div id="tab-about" class="admin-tab-content hidden space-y-6">
+          <div>
+            <label class="text-sm">About Title</label>
+            <input id="aboutTitleInput" class="w-full px-3 py-2 rounded-lg admin-input" />
+          </div>
+          <div>
+            <label class="text-sm">About Paragraphs (one per line)</label>
+            <textarea id="aboutTextInput" rows="6" class="w-full px-3 py-2 rounded-lg admin-input"></textarea>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm">About Image URL</label>
+              <input id="aboutImageInput" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+            <div>
+              <label class="text-sm">Upload Image</label>
+              <input id="aboutImageFile" type="file" accept="image/*" class="w-full px-3 py-2 rounded-lg admin-input" />
+            </div>
+          </div>
+          <button id="saveAbout" class="px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Save About Changes</button>
+        </div>
+
+        <div id="tab-projects" class="admin-tab-content hidden space-y-6">
+          <div class="admin-card p-4 rounded-xl">
+            <h4 class="font-semibold mb-2">Add / Edit Project</h4>
+            <input id="projectId" type="hidden" />
+            <div class="grid md:grid-cols-2 gap-3">
+              <input id="projectTitle" placeholder="Project title" class="px-3 py-2 rounded-lg admin-input" />
+              <input id="projectStack" placeholder="Tech Stack" class="px-3 py-2 rounded-lg admin-input" />
+              <input id="projectImageUrl" placeholder="Image URL" class="px-3 py-2 rounded-lg admin-input" />
+              <input id="projectDemo" placeholder="Live demo link" class="px-3 py-2 rounded-lg admin-input" />
+              <input id="projectGithub" placeholder="GitHub link" class="px-3 py-2 rounded-lg admin-input" />
+              <input id="projectImageFile" type="file" accept="image/*" class="px-3 py-2 rounded-lg admin-input" />
+              <textarea id="projectDescription" rows="3" placeholder="Project description" class="md:col-span-2 px-3 py-2 rounded-lg admin-input"></textarea>
+            </div>
+            <button id="saveProject" class="mt-3 px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Save Project</button>
+          </div>
+          <div id="projectsAdminList" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-skills" class="admin-tab-content hidden space-y-6">
+          <div class="admin-card p-4 rounded-xl">
+            <h4 class="font-semibold mb-2">Add / Edit Skill</h4>
+            <input id="skillId" type="hidden" />
+            <div class="grid md:grid-cols-2 gap-3">
+              <input id="skillTitle" placeholder="Skill title" class="px-3 py-2 rounded-lg admin-input" />
+              <textarea id="skillDescription" rows="3" placeholder="Skill description" class="px-3 py-2 rounded-lg admin-input"></textarea>
+            </div>
+            <button id="saveSkill" class="mt-3 px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Save Skill</button>
+          </div>
+          <div id="skillsAdminList" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-services" class="admin-tab-content hidden space-y-6">
+          <div class="admin-card p-4 rounded-xl">
+            <h4 class="font-semibold mb-2">Add / Edit Service</h4>
+            <input id="serviceId" type="hidden" />
+            <div class="grid md:grid-cols-2 gap-3">
+              <input id="serviceTitle" placeholder="Service title" class="px-3 py-2 rounded-lg admin-input" />
+              <textarea id="serviceDescription" rows="3" placeholder="Service description" class="px-3 py-2 rounded-lg admin-input"></textarea>
+            </div>
+            <button id="saveService" class="mt-3 px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Save Service</button>
+          </div>
+          <div id="servicesAdminList" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-auth" class="admin-tab-content hidden space-y-6">
+          <div>
+            <label class="text-sm">Change Username</label>
+            <input id="newUsername" class="w-full px-3 py-2 rounded-lg admin-input" />
+          </div>
+          <div>
+            <label class="text-sm">Change Password</label>
+            <input id="newPassword" type="password" class="w-full px-3 py-2 rounded-lg admin-input" />
+          </div>
+          <button id="saveAuth" class="px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Update Login Details</button>
+          <p id="authUpdateMsg" class="text-teal-400 hidden">Login details updated.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultData = {
+      global: {
+        logo: 'DPCs',
+        heroName: 'Daini Peculiar Ayomide',
+        typingTexts: [
+          'Full-Stack Developer',
+          'Python & Web Application Developer',
+          'UI/UX-Focused Software Engineer',
+          'Building Scalable Digital Solutions'
+        ],
+        heroSubtitle: 'I design and develop fast, scalable, and user-focused web applications with clean interfaces and solid backend logic.',
+        primaryBtn: 'View My Work',
+        secondaryBtn: 'Contact Me',
+        footerTagline: 'Building scalable and user-focused digital solutions.',
+        footerCopyright: '© 2025 Daini Peculiar Ayomide. All rights reserved.',
+        aboutTitle: 'About Me',
+        skillsTitle: 'My Skills',
+        projectsTitle: 'Projects',
+        servicesTitle: 'What I Can Build',
+        contactTitle: 'Let’s Build Something Together'
+      },
+      about: {
+        title: 'About Me',
+        paragraphs: [
+          'I’m Daini Peculiar Ayomide, a passionate full-stack developer focused on building modern, responsive, and performance-driven digital products.',
+          'I specialize in turning ideas into functional software by combining clean code, thoughtful UI/UX design, and scalable backend systems. I enjoy solving problems, learning new technologies, and creating solutions that are both visually appealing and technically sound.',
+          'My goal is simple: build software that works beautifully and performs efficiently.'
+        ],
+        image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop'
+      },
+      skills: [
+        { id: Date.now() + 1, title: 'Frontend Development', desc: 'Building responsive and interactive user interfaces using modern web technologies.' },
+        { id: Date.now() + 2, title: 'Backend Development', desc: 'Designing secure and scalable server-side logic and application workflows.' },
+        { id: Date.now() + 3, title: 'Python Development', desc: 'Developing automation tools, web apps, and data-driven solutions with Python.' },
+        { id: Date.now() + 4, title: 'Streamlit Applications', desc: 'Creating fast, interactive dashboards and tools for real-world use cases.' },
+        { id: Date.now() + 5, title: 'UI / UX Design', desc: 'Designing clean, intuitive, and user-friendly interfaces with strong visual hierarchy.' },
+        { id: Date.now() + 6, title: 'Problem Solving & Logic', desc: 'Breaking down complex problems into efficient and maintainable solutions.' }
+      ],
+      projects: [
+        {
+          id: Date.now() + 11,
+          title: 'Project Title',
+          desc: 'Short description of what the project does and the problem it solves.',
+          stack: 'HTML, CSS, JavaScript, Python, Streamlit',
+          image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop',
+          demo: '#',
+          github: '#'
+        },
+        {
+          id: Date.now() + 12,
+          title: 'Project Title',
+          desc: 'Short description of what the project does and the problem it solves.',
+          stack: 'HTML, CSS, JavaScript, Python, Streamlit',
+          image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop',
+          demo: '#',
+          github: '#'
         }
+      ],
+      services: [
+        { id: Date.now() + 21, title: 'Portfolio Websites', desc: 'Personal and professional portfolios tailored to showcase skills and projects.' },
+        { id: Date.now() + 22, title: 'Business Websites', desc: 'Clean, responsive websites for brands, startups, and organizations.' },
+        { id: Date.now() + 23, title: 'Web Applications', desc: 'Dynamic web apps with strong backend logic and interactive frontends.' },
+        { id: Date.now() + 24, title: 'Dashboards & Tools', desc: 'Custom dashboards for data visualization, automation, and analytics.' },
+        { id: Date.now() + 25, title: 'Custom Software Solutions', desc: 'Tailored software built to solve specific problems or workflows.' }
+      ]
+    };
 
-        // --- RENDERING LOGIC ---
-        let typedInstance;
-        function renderSite() {
-            // Header
-            document.getElementById('site-logo-name').textContent = siteData.global.logoName;
-            
-            // Hero
-            if (typedInstance) typedInstance.destroy();
-            typedInstance = new Typed('#typed', {
-                strings: siteData.global.heroStrings,
-                typeSpeed: 50,
-                backSpeed: 30,
-                loop: true
-            });
-            document.getElementById('hero-subtitle').textContent = siteData.global.heroSubtitle;
+    const defaultAuth = { username: 'admin', password: 'admin123' };
 
-            // About
-            document.getElementById('about-title').textContent = siteData.about.title;
-            const aboutParaContainer = document.getElementById('about-paragraphs');
-            aboutParaContainer.innerHTML = '';
-            siteData.about.paragraphs.forEach(p => {
-                const para = document.createElement('p');
-                para.textContent = p;
-                aboutParaContainer.appendChild(para);
-            });
-            document.getElementById('about-img-display').src = siteData.about.imageUrl || 'https://via.placeholder.com/400x400/3b82f6/ffffff?text=DP';
+    const storageKey = 'dpcs-portfolio-data';
+    const authKey = 'dpcs-portfolio-auth';
 
-            // Skills
-            const skillsGrid = document.getElementById('skills-grid');
-            skillsGrid.innerHTML = '';
-            siteData.skills.forEach(skill => {
-                skillsGrid.innerHTML += `
-                    <div class="skill-card">
-                        <div class="skill-icon"><i class="${skill.icon}"></i></div>
-                        <h3>${skill.title}</h3>
-                        <p>${skill.desc}</p>
-                    </div>
-                `;
-            });
+    const state = JSON.parse(localStorage.getItem(storageKey)) || defaultData;
+    const authState = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
 
-            // Projects
-            const projectsGrid = document.getElementById('projects-grid');
-            projectsGrid.innerHTML = '';
-            siteData.projects.forEach(project => {
-                const imageHtml = project.img 
-                    ? `<img src="${project.img}" alt="${project.title}">` 
-                    : `<i class="fas fa-laptop-code"></i>`;
-                projectsGrid.innerHTML += `
-                    <div class="project-card">
-                        <div class="project-image">${imageHtml}</div>
-                        <div class="project-content">
-                            <h3>${project.title}</h3>
-                            <p>${project.desc}</p>
-                            <div class="project-links">
-                                <a href="${project.demo}" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                                <a href="${project.github}" class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
+    const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
+    const saveAuth = () => localStorage.setItem(authKey, JSON.stringify(authState));
 
-            // Services
-            const servicesGrid = document.getElementById('services-grid');
-            servicesGrid.innerHTML = '';
-            siteData.services.forEach(service => {
-                servicesGrid.innerHTML += `
-                    <div class="service-card">
-                        <h3>${service.title}</h3>
-                        <p>${service.desc}</p>
-                    </div>
-                `;
-            });
+    const logoEl = document.getElementById('logo');
+    const footerLogo = document.getElementById('footerLogo');
+    const heroName = document.getElementById('heroName');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+    const heroPrimaryBtn = document.getElementById('heroPrimaryBtn');
+    const heroSecondaryBtn = document.getElementById('heroSecondaryBtn');
+    const aboutTitle = document.getElementById('aboutTitle');
+    const aboutText = document.getElementById('aboutText');
+    const aboutImage = document.getElementById('aboutImage');
+    const skillsGrid = document.getElementById('skillsGrid');
+    const projectsGrid = document.getElementById('projectsGrid');
+    const servicesGrid = document.getElementById('servicesGrid');
+    const skillsTitle = document.getElementById('skillsTitle');
+    const projectsTitle = document.getElementById('projectsTitle');
+    const servicesTitle = document.getElementById('servicesTitle');
+    const contactTitle = document.getElementById('contactTitle');
+    const footerTagline = document.getElementById('footerTagline');
+    const footerCopyright = document.getElementById('footerCopyright');
 
-            // Footer
-            document.getElementById('footer-tagline').textContent = siteData.global.footerText;
+    function renderGlobal() {
+      logoEl.textContent = state.global.logo;
+      footerLogo.textContent = state.global.logo;
+      heroName.textContent = state.global.heroName;
+      heroSubtitle.textContent = state.global.heroSubtitle;
+      heroPrimaryBtn.textContent = state.global.primaryBtn;
+      heroSecondaryBtn.textContent = state.global.secondaryBtn;
+      footerTagline.textContent = state.global.footerTagline;
+      footerCopyright.textContent = state.global.footerCopyright;
+      aboutTitle.textContent = state.global.aboutTitle;
+      skillsTitle.textContent = state.global.skillsTitle;
+      projectsTitle.textContent = state.global.projectsTitle;
+      servicesTitle.textContent = state.global.servicesTitle;
+      contactTitle.textContent = state.global.contactTitle;
+    }
+
+    function renderAbout() {
+      aboutTitle.textContent = state.about.title;
+      aboutText.innerHTML = state.about.paragraphs.map(p => `<p>${p}</p>`).join('');
+      aboutImage.src = state.about.image;
+    }
+
+    function renderSkills() {
+      skillsGrid.innerHTML = '';
+      state.skills.forEach(skill => {
+        const card = document.createElement('div');
+        card.className = 'p-6 rounded-2xl bg-slate-900 border border-slate-800';
+        card.innerHTML = `<h3 class="text-xl font-semibold mb-2">${skill.title}</h3><p class="text-slate-400">${skill.desc}</p>`;
+        skillsGrid.appendChild(card);
+      });
+    }
+
+    function renderProjects() {
+      projectsGrid.innerHTML = '';
+      state.projects.forEach(project => {
+        const card = document.createElement('div');
+        card.className = 'p-6 rounded-2xl bg-slate-900 border border-slate-800';
+        card.innerHTML = `
+          <img src="${project.image}" alt="${project.title}" class="w-full h-48 object-cover rounded-xl mb-4" />
+          <h3 class="text-xl font-semibold mb-2">${project.title}</h3>
+          <p class="text-slate-400 mb-3">${project.desc}</p>
+          <p class="text-sm text-slate-500 mb-3">Tech Stack: ${project.stack}</p>
+          <div class="flex gap-4 text-teal-400">
+            <a href="${project.demo}" target="_blank" class="hover:text-teal-300">Live Demo</a>
+            <a href="${project.github}" target="_blank" class="hover:text-teal-300">GitHub</a>
+          </div>
+        `;
+        projectsGrid.appendChild(card);
+      });
+    }
+
+    function renderServices() {
+      servicesGrid.innerHTML = '';
+      state.services.forEach(service => {
+        const card = document.createElement('div');
+        card.className = 'p-6 rounded-2xl bg-slate-900 border border-slate-800';
+        card.innerHTML = `<h3 class="text-xl font-semibold mb-2">${service.title}</h3><p class="text-slate-400">${service.desc}</p>`;
+        servicesGrid.appendChild(card);
+      });
+    }
+
+    function renderAll() {
+      renderGlobal();
+      renderAbout();
+      renderSkills();
+      renderProjects();
+      renderServices();
+    }
+
+    // Typing effect
+    let typingIndex = 0;
+    let charIndex = 0;
+    const typingEl = document.getElementById('typingText');
+    function typeLoop() {
+      const current = state.global.typingTexts[typingIndex] || '';
+      typingEl.textContent = current.slice(0, charIndex++);
+      if (charIndex <= current.length) {
+        setTimeout(typeLoop, 90);
+      } else {
+        setTimeout(() => {
+          charIndex = 0;
+          typingIndex = (typingIndex + 1) % state.global.typingTexts.length;
+          typeLoop();
+        }, 1400);
+      }
+    }
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('contactSuccess').classList.remove('hidden');
+      contactForm.reset();
+    });
+
+    // Admin Panel
+    const adminOverlay = document.getElementById('adminOverlay');
+    const adminClose = document.getElementById('adminClose');
+    const adminLogin = document.getElementById('adminLogin');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLoginError = document.getElementById('adminLoginError');
+    const adminLogout = document.getElementById('adminLogout');
+
+    let logoClicks = 0;
+    let clickTimer = null;
+    logoEl.addEventListener('click', () => {
+      logoClicks++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => (logoClicks = 0), 600);
+      if (logoClicks === 3) {
+        logoClicks = 0;
+        openAdmin();
+      }
+    });
+
+    function openAdmin() {
+      adminOverlay.classList.remove('hidden');
+      adminOverlay.classList.add('flex');
+      adminLogin.classList.remove('hidden');
+      adminDashboard.classList.add('hidden');
+      adminLoginError.classList.add('hidden');
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+    }
+
+    adminClose.addEventListener('click', () => {
+      adminOverlay.classList.add('hidden');
+      adminOverlay.classList.remove('flex');
+    });
+
+    adminLoginBtn.addEventListener('click', () => {
+      const user = document.getElementById('adminUsername').value.trim();
+      const pass = document.getElementById('adminPassword').value.trim();
+      const stored = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
+      if (user === stored.username && pass === stored.password) {
+        adminLogin.classList.add('hidden');
+        adminDashboard.classList.remove('hidden');
+        loadAdminInputs();
+      } else {
+        adminLoginError.classList.remove('hidden');
+      }
+    });
+
+    adminLogout.addEventListener('click', () => {
+      adminDashboard.classList.add('hidden');
+      adminLogin.classList.remove('hidden');
+    });
+
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('admin-tab-active'));
+        tab.classList.add('admin-tab-active');
+        const target = tab.dataset.tab;
+        document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(`tab-${target}`).classList.remove('hidden');
+      });
+    });
+
+    // Global Editor
+    function loadAdminInputs() {
+      document.getElementById('globalLogo').value = state.global.logo;
+      document.getElementById('globalHeroName').value = state.global.heroName;
+      document.getElementById('globalTyping').value = state.global.typingTexts.join('\n');
+      document.getElementById('globalHeroSubtitle').value = state.global.heroSubtitle;
+      document.getElementById('globalPrimaryBtn').value = state.global.primaryBtn;
+      document.getElementById('globalSecondaryBtn').value = state.global.secondaryBtn;
+      document.getElementById('globalFooterTagline').value = state.global.footerTagline;
+      document.getElementById('globalFooterCopyright').value = state.global.footerCopyright;
+      document.getElementById('globalAboutTitle').value = state.global.aboutTitle;
+      document.getElementById('globalSkillsTitle').value = state.global.skillsTitle;
+      document.getElementById('globalProjectsTitle').value = state.global.projectsTitle;
+      document.getElementById('globalServicesTitle').value = state.global.servicesTitle;
+      document.getElementById('globalContactTitle').value = state.global.contactTitle;
+
+      document.getElementById('aboutTitleInput').value = state.about.title;
+      document.getElementById('aboutTextInput').value = state.about.paragraphs.join('\n');
+      document.getElementById('aboutImageInput').value = state.about.image;
+
+      renderAdminLists();
+    }
+
+    document.getElementById('saveGlobal').addEventListener('click', () => {
+      state.global.logo = document.getElementById('globalLogo').value.trim();
+      state.global.heroName = document.getElementById('globalHeroName').value.trim();
+      state.global.typingTexts = document.getElementById('globalTyping').value.split('\n').filter(Boolean);
+      state.global.heroSubtitle = document.getElementById('globalHeroSubtitle').value.trim();
+      state.global.primaryBtn = document.getElementById('globalPrimaryBtn').value.trim();
+      state.global.secondaryBtn = document.getElementById('globalSecondaryBtn').value.trim();
+      state.global.footerTagline = document.getElementById('globalFooterTagline').value.trim();
+      state.global.footerCopyright = document.getElementById('globalFooterCopyright').value.trim();
+      state.global.aboutTitle = document.getElementById('globalAboutTitle').value.trim();
+      state.global.skillsTitle = document.getElementById('globalSkillsTitle').value.trim();
+      state.global.projectsTitle = document.getElementById('globalProjectsTitle').value.trim();
+      state.global.servicesTitle = document.getElementById('globalServicesTitle').value.trim();
+      state.global.contactTitle = document.getElementById('globalContactTitle').value.trim();
+      saveState();
+      renderAll();
+    });
+
+    // About Manager
+    document.getElementById('aboutImageFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('aboutImageInput').value = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('saveAbout').addEventListener('click', () => {
+      state.about.title = document.getElementById('aboutTitleInput').value.trim();
+      state.about.paragraphs = document.getElementById('aboutTextInput').value.split('\n').filter(Boolean);
+      state.about.image = document.getElementById('aboutImageInput').value.trim();
+      saveState();
+      renderAbout();
+    });
+
+    // Projects Manager
+    document.getElementById('projectImageFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('projectImageUrl').value = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('saveProject').addEventListener('click', () => {
+      const id = document.getElementById('projectId').value;
+      const project = {
+        id: id ? Number(id) : Date.now(),
+        title: document.getElementById('projectTitle').value.trim(),
+        desc: document.getElementById('projectDescription').value.trim(),
+        stack: document.getElementById('projectStack').value.trim() || 'HTML, CSS, JavaScript',
+        image: document.getElementById('projectImageUrl').value.trim(),
+        demo: document.getElementById('projectDemo').value.trim() || '#',
+        github: document.getElementById('projectGithub').value.trim() || '#'
+      };
+      const index = state.projects.findIndex(p => p.id === project.id);
+      if (index >= 0) {
+        state.projects[index] = project;
+      } else {
+        state.projects.unshift(project);
+      }
+      saveState();
+      renderProjects();
+      renderAdminLists();
+      clearProjectForm();
+    });
+
+    function clearProjectForm() {
+      document.getElementById('projectId').value = '';
+      document.getElementById('projectTitle').value = '';
+      document.getElementById('projectDescription').value = '';
+      document.getElementById('projectStack').value = '';
+      document.getElementById('projectImageUrl').value = '';
+      document.getElementById('projectDemo').value = '';
+      document.getElementById('projectGithub').value = '';
+      document.getElementById('projectImageFile').value = '';
+    }
+
+    function renderAdminLists() {
+      const projectsAdminList = document.getElementById('projectsAdminList');
+      projectsAdminList.innerHTML = '';
+      state.projects.forEach(project => {
+        const item = document.createElement('div');
+        item.className = 'admin-card p-3 rounded-xl flex items-center justify-between';
+        item.innerHTML = `
+          <div>
+            <p class="font-semibold">${project.title}</p>
+            <p class="text-sm text-slate-400">${project.desc.slice(0, 80)}...</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="edit-project px-2 py-1 bg-slate-700 rounded" data-id="${project.id}">Edit</button>
+            <button class="delete-project px-2 py-1 bg-red-500 rounded" data-id="${project.id}">Delete</button>
+          </div>
+        `;
+        projectsAdminList.appendChild(item);
+      });
+
+      const skillsAdminList = document.getElementById('skillsAdminList');
+      skillsAdminList.innerHTML = '';
+      state.skills.forEach(skill => {
+        const item = document.createElement('div');
+        item.className = 'admin-card p-3 rounded-xl flex items-center justify-between';
+        item.innerHTML = `
+          <div>
+            <p class="font-semibold">${skill.title}</p>
+            <p class="text-sm text-slate-400">${skill.desc.slice(0, 80)}...</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="edit-skill px-2 py-1 bg-slate-700 rounded" data-id="${skill.id}">Edit</button>
+            <button class="delete-skill px-2 py-1 bg-red-500 rounded" data-id="${skill.id}">Delete</button>
+          </div>
+        `;
+        skillsAdminList.appendChild(item);
+      });
+
+      const servicesAdminList = document.getElementById('servicesAdminList');
+      servicesAdminList.innerHTML = '';
+      state.services.forEach(service => {
+        const item = document.createElement('div');
+        item.className = 'admin-card p-3 rounded-xl flex items-center justify-between';
+        item.innerHTML = `
+          <div>
+            <p class="font-semibold">${service.title}</p>
+            <p class="text-sm text-slate-400">${service.desc.slice(0, 80)}...</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="edit-service px-2 py-1 bg-slate-700 rounded" data-id="${service.id}">Edit</button>
+            <button class="delete-service px-2 py-1 bg-red-500 rounded" data-id="${service.id}">Delete</button>
+          </div>
+        `;
+        servicesAdminList.appendChild(item);
+      });
+
+      document.querySelectorAll('.edit-project').forEach(btn => btn.addEventListener('click', () => editProject(btn.dataset.id)));
+      document.querySelectorAll('.delete-project').forEach(btn => btn.addEventListener('click', () => deleteProject(btn.dataset.id)));
+      document.querySelectorAll('.edit-skill').forEach(btn => btn.addEventListener('click', () => editSkill(btn.dataset.id)));
+      document.querySelectorAll('.delete-skill').forEach(btn => btn.addEventListener('click', () => deleteSkill(btn.dataset.id)));
+      document.querySelectorAll('.edit-service').forEach(btn => btn.addEventListener('click', () => editService(btn.dataset.id)));
+      document.querySelectorAll('.delete-service').forEach(btn => btn.addEventListener('click', () => deleteService(btn.dataset.id)));
+    }
+
+    function editProject(id) {
+      const project = state.projects.find(p => p.id === Number(id));
+      if (!project) return;
+      document.getElementById('projectId').value = project.id;
+      document.getElementById('projectTitle').value = project.title;
+      document.getElementById('projectDescription').value = project.desc;
+      document.getElementById('projectStack').value = project.stack;
+      document.getElementById('projectImageUrl').value = project.image;
+      document.getElementById('projectDemo').value = project.demo;
+      document.getElementById('projectGithub').value = project.github;
+    }
+
+    function deleteProject(id) {
+      state.projects = state.projects.filter(p => p.id !== Number(id));
+      saveState();
+      renderProjects();
+      renderAdminLists();
+    }
+
+    // Skills Manager
+    document.getElementById('saveSkill').addEventListener('click', () => {
+      const id = document.getElementById('skillId').value;
+      const skill = {
+        id: id ? Number(id) : Date.now(),
+        title: document.getElementById('skillTitle').value.trim(),
+        desc: document.getElementById('skillDescription').value.trim()
+      };
+      const index = state.skills.findIndex(s => s.id === skill.id);
+      if (index >= 0) state.skills[index] = skill; else state.skills.unshift(skill);
+      saveState();
+      renderSkills();
+      renderAdminLists();
+      document.getElementById('skillId').value = '';
+      document.getElementById('skillTitle').value = '';
+      document.getElementById('skillDescription').value = '';
+    });
+
+    function editSkill(id) {
+      const skill = state.skills.find(s => s.id === Number(id));
+      if (!skill) return;
+      document.getElementById('skillId').value = skill.id;
+      document.getElementById('skillTitle').value = skill.title;
+      document.getElementById('skillDescription').value = skill.desc;
+    }
+
+    function deleteSkill(id) {
+      state.skills = state.skills.filter(s => s.id !== Number(id));
+      saveState();
+      renderSkills();
+      renderAdminLists();
+    }
+
+    // Services Manager
+    document.getElementById('saveService').addEventListener('click', () => {
+      const id = document.getElementById('serviceId').value;
+      const service = {
+        id: id ? Number(id) : Date.now(),
+        title: document.getElementById('serviceTitle').value.trim(),
+        desc: document.getElementById('serviceDescription').value.trim()
+      };
+      const index = state.services.findIndex(s => s.id === service.id);
+      if (index >= 0) state.services[index] = service; else state.services.unshift(service);
+      saveState();
+      renderServices();
+      renderAdminLists();
+      document.getElementById('serviceId').value = '';
+      document.getElementById('serviceTitle').value = '';
+      document.getElementById('serviceDescription').value = '';
+    });
+
+    function editService(id) {
+      const service = state.services.find(s => s.id === Number(id));
+      if (!service) return;
+      document.getElementById('serviceId').value = service.id;
+      document.getElementById('serviceTitle').value = service.title;
+      document.getElementById('serviceDescription').value = service.desc;
+    }
+
+    function deleteService(id) {
+      state.services = state.services.filter(s => s.id !== Number(id));
+      saveState();
+      renderServices();
+      renderAdminLists();
+    }
+
+    // Auth change
+    document.getElementById('saveAuth').addEventListener('click', () => {
+      const newUser = document.getElementById('newUsername').value.trim();
+      const newPass = document.getElementById('newPassword').value.trim();
+      if (newUser) authState.username = newUser;
+      if (newPass) authState.password = newPass;
+      saveAuth();
+      const msg = document.getElementById('authUpdateMsg');
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 2000);
+      document.getElementById('newUsername').value = '';
+      document.getElementById('newPassword').value = '';
+    });
+
+    renderAll();
+    typeLoop();
+
+    // Dynamic UI Enhancements
+    const root = document.documentElement;
+    const accentPairs = [
+      ['#2dd4bf', '#6366f1', '#22c55e'],
+      ['#38bdf8', '#22c55e', '#f59e0b'],
+      ['#a855f7', '#ec4899', '#14b8a6'],
+      ['#f97316', '#0ea5e9', '#84cc16'],
+      ['#0ea5e9', '#8b5cf6', '#ec4899']
+    ];
+    let colorIndex = 0;
+    let freezeColors = false;
+
+    const applyAccent = (index) => {
+      const [a, b, c] = accentPairs[index % accentPairs.length];
+      root.style.setProperty('--accent', a);
+      root.style.setProperty('--accent-2', b);
+      root.style.setProperty('--accent-3', c);
+      root.style.setProperty('--glow', `${a}55`);
+    };
+    applyAccent(colorIndex);
+
+    const randomizeAccent = () => {
+      if (freezeColors) return;
+      colorIndex = (colorIndex + 1) % accentPairs.length;
+      applyAccent(colorIndex);
+    };
+
+    const interactiveTargets = document.querySelectorAll('a, button, .admin-card, #skillsGrid div, #projectsGrid div, #servicesGrid div');
+    interactiveTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        randomizeAccent();
+        el.classList.add('interactive-hover');
+      });
+      el.addEventListener('mouseleave', () => el.classList.remove('interactive-hover'));
+      el.addEventListener('click', randomizeAccent);
+    });
+
+    document.addEventListener('scroll', () => {
+      if (!freezeColors && Math.random() > 0.7) randomizeAccent();
+    }, { passive: true });
+
+    document.getElementById('themeFreeze').addEventListener('click', () => {
+      freezeColors = !freezeColors;
+      document.getElementById('themeFreeze').textContent = freezeColors ? 'Unfreeze Theme' : 'Freeze Theme';
+    });
+
+    document.getElementById('themeReset').addEventListener('click', () => {
+      freezeColors = false;
+      colorIndex = 0;
+      applyAccent(colorIndex);
+      document.getElementById('themeFreeze').textContent = 'Freeze Theme';
+    });
+
+    // Cursor follower
+    const cursorDot = document.getElementById('cursorDot');
+    let cursorEnabled = true;
+    let cursorX = window.innerWidth / 2;
+    let cursorY = window.innerHeight / 2;
+    let dotX = cursorX;
+    let dotY = cursorY;
+
+    const moveDot = () => {
+      dotX += (cursorX - dotX) * 0.15;
+      dotY += (cursorY - dotY) * 0.15;
+      cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+      requestAnimationFrame(moveDot);
+    };
+    moveDot();
+
+    window.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+    });
+
+    document.querySelectorAll('a, button, .admin-card, #skillsGrid div, #projectsGrid div, #servicesGrid div').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorDot.classList.add('active'));
+      el.addEventListener('mouseleave', () => cursorDot.classList.remove('active'));
+    });
+
+    document.getElementById('cursorToggle').addEventListener('click', () => {
+      cursorEnabled = !cursorEnabled;
+      cursorDot.style.display = cursorEnabled ? 'block' : 'none';
+      document.getElementById('cursorToggle').textContent = cursorEnabled ? 'Disable Cursor Dot' : 'Enable Cursor Dot';
+    });
+
+    // Scroll to top + progress
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const scrollProgress = document.getElementById('scrollProgress');
+
+    const updateScroll = () => {
+      const scrollY = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = height ? (scrollY / height) * 100 : 0;
+      scrollProgress.style.width = `${progress}%`;
+      if (scrollY > window.innerHeight / 2) {
+        scrollTopBtn.classList.remove('hidden');
+        scrollTopBtn.style.opacity = '1';
+      } else {
+        scrollTopBtn.classList.add('hidden');
+        scrollTopBtn.style.opacity = '0';
+      }
+    };
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Section mood and reveal
+    const moodSections = document.querySelectorAll('.mood-section');
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('mood-active');
+          entry.target.querySelectorAll('.reveal').forEach(el => el.classList.add('reveal-active'));
         }
+      });
+    }, { threshold: 0.3 });
+    moodSections.forEach(section => observer.observe(section));
+    revealElements.forEach(el => {
+      if (el.closest('.mood-section')) return;
+      const simpleObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('reveal-active'));
+      }, { threshold: 0.2 });
+      simpleObserver.observe(el);
+    });
 
-        // --- ADMIN PANEL UI LOGIC ---
-        function triggerAdmin() {
-            document.getElementById('admin-modal').style.display = 'block';
-            document.getElementById('admin-login-screen').style.display = 'block';
-            document.getElementById('admin-dashboard').style.display = 'none';
-        }
+    // Interactive background particles
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-        function closeAdmin() {
-            document.getElementById('admin-modal').style.display = 'none';
-        }
+    const createParticles = () => {
+      particles = Array.from({ length: 45 }).map(() => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4
+      }));
+    };
+    createParticles();
 
-        function loginAdmin() {
-            const user = document.getElementById('admin-user').value;
-            const pass = document.getElementById('admin-pass').value;
+    let bgMouse = { x: canvas.width / 2, y: canvas.height / 2 };
+    window.addEventListener('mousemove', (e) => {
+      bgMouse = { x: e.clientX, y: e.clientY };
+    });
 
-            if (user === siteData.auth.username && pass === siteData.auth.password) {
-                document.getElementById('admin-login-screen').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
-                document.getElementById('login-error').style.display = 'none';
-                loadAdminFields();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
-        }
+    const drawParticles = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        const dx = (bgMouse.x - p.x) * 0.0004;
+        const dy = (bgMouse.y - p.y) * 0.0004;
+        p.x += dx;
+        p.y += dy;
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(drawParticles);
+    };
+    drawParticles();
 
-        function logoutAdmin() {
-            document.getElementById('admin-dashboard').style.display = 'none';
-            document.getElementById('admin-login-screen').style.display = 'block';
-            document.getElementById('admin-user').value = '';
-            document.getElementById('admin-pass').value = '';
-        }
+    // Command palette
+    const commandOverlay = document.getElementById('commandPaletteOverlay');
+    const commandInput = document.getElementById('commandInput');
+    const commandList = document.getElementById('commandList');
+    const commands = [
+      { label: 'Go to Home', action: () => document.getElementById('home').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Go to About', action: () => document.getElementById('about').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Go to Skills', action: () => document.getElementById('skills').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Go to Projects', action: () => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Go to Services', action: () => document.getElementById('services').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Go to Contact', action: () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }) },
+      { label: 'Toggle Theme Freeze', action: () => document.getElementById('themeFreeze').click() },
+      { label: 'Reset Theme Colors', action: () => document.getElementById('themeReset').click() },
+      { label: 'Toggle Cursor Dot', action: () => document.getElementById('cursorToggle').click() },
+      { label: 'Open Admin Panel', action: () => openAdmin() }
+    ];
 
-        function showAdminTab(tab) {
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // --- ADMIN FIELD LOADERS ---
-        function loadAdminFields() {
-            // Global
-            document.getElementById('edit-logo-name').value = siteData.global.logoName;
-            document.getElementById('edit-hero-strings').value = siteData.global.heroStrings.join(', ');
-            document.getElementById('edit-hero-subtitle').value = siteData.global.heroSubtitle;
-            document.getElementById('edit-footer-text').value = siteData.global.footerText;
-
-            // About
-            document.getElementById('edit-about-title').value = siteData.about.title;
-            document.getElementById('edit-about-paragraphs').value = siteData.about.paragraphs.join('\n');
-            document.getElementById('edit-about-img-url').value = siteData.about.imageUrl;
-
-            // Skills List
-            renderAdminSkills();
-            // Projects List
-            renderAdminProjects();
-            // Services List
-            renderAdminServices();
-            
-            // Auth
-            document.getElementById('new-admin-user').value = siteData.auth.username;
-            document.getElementById('new-admin-pass').value = '';
-        }
-
-        function renderAdminSkills() {
-            const list = document.getElementById('admin-skills-list');
-            list.innerHTML = '';
-            siteData.skills.forEach(skill => {
-                list.innerHTML += `
-                    <div class="admin-item-card">
-                        <div><strong>${skill.title}</strong></div>
-                        <div class="admin-item-actions">
-                            <button class="btn-delete" onclick="deleteItem('skills', ${skill.id})">Delete</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function renderAdminProjects() {
-            const list = document.getElementById('admin-projects-list');
-            list.innerHTML = '';
-            siteData.projects.forEach(project => {
-                list.innerHTML += `
-                    <div class="admin-item-card">
-                        <div><strong>${project.title}</strong></div>
-                        <div class="admin-item-actions">
-                            <button class="btn-delete" onclick="deleteItem('projects', ${project.id})">Delete</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function renderAdminServices() {
-            const list = document.getElementById('admin-services-list');
-            list.innerHTML = '';
-            siteData.services.forEach(service => {
-                list.innerHTML += `
-                    <div class="admin-item-card">
-                        <div><strong>${service.title}</strong></div>
-                        <div class="admin-item-actions">
-                            <button class="btn-delete" onclick="deleteItem('services', ${service.id})">Delete</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // --- ADMIN SAVE ACTIONS ---
-        function saveGlobalContent() {
-            siteData.global.logoName = document.getElementById('edit-logo-name').value;
-            siteData.global.heroStrings = document.getElementById('edit-hero-strings').value.split(',').map(s => s.trim());
-            siteData.global.heroSubtitle = document.getElementById('edit-hero-subtitle').value;
-            siteData.global.footerText = document.getElementById('edit-footer-text').value;
-            saveData();
-            alert('Global content updated!');
-        }
-
-        function saveAboutContent() {
-            siteData.about.title = document.getElementById('edit-about-title').value;
-            siteData.about.paragraphs = document.getElementById('edit-about-paragraphs').value.split('\n').filter(p => p.trim() !== '');
-            siteData.about.imageUrl = document.getElementById('edit-about-img-url').value;
-            saveData();
-            alert('About section updated!');
-        }
-
-        function addSkill() {
-            const title = document.getElementById('new-skill-title').value;
-            const icon = document.getElementById('new-skill-icon').value;
-            const desc = document.getElementById('new-skill-desc').value;
-            if(!title || !desc) return alert('Please fill title and description');
-
-            const newSkill = { id: Date.now(), title, icon: icon || 'fas fa-code', desc };
-            siteData.skills.push(newSkill);
-            saveData();
-            renderAdminSkills();
-            // clear fields
-            document.getElementById('new-skill-title').value = '';
-            document.getElementById('new-skill-icon').value = '';
-            document.getElementById('new-skill-desc').value = '';
-        }
-
-        function addProject() {
-            const title = document.getElementById('new-project-title').value;
-            const desc = document.getElementById('new-project-desc').value;
-            const url = document.getElementById('new-project-img-url').value;
-            const base64 = document.getElementById('new-project-img-base64').value;
-            const demo = document.getElementById('new-project-demo').value;
-            const github = document.getElementById('new-project-github').value;
-
-            if(!title || !desc) return alert('Please fill title and description');
-
-            const newProject = {
-                id: Date.now(),
-                title,
-                desc,
-                img: base64 || url,
-                demo: demo || '#',
-                github: github || '#'
-            };
-            siteData.projects.push(newProject);
-            saveData();
-            renderAdminProjects();
-            // clear fields
-            document.getElementById('new-project-title').value = '';
-            document.getElementById('new-project-desc').value = '';
-            document.getElementById('new-project-img-url').value = '';
-            document.getElementById('new-project-img-base64').value = '';
-            document.getElementById('new-project-demo').value = '';
-            document.getElementById('new-project-github').value = '';
-        }
-
-        function addService() {
-            const title = document.getElementById('new-service-title').value;
-            const desc = document.getElementById('new-service-desc').value;
-            if(!title || !desc) return alert('Please fill title and description');
-
-            const newService = { id: Date.now(), title, desc };
-            siteData.services.push(newService);
-            saveData();
-            renderAdminServices();
-            document.getElementById('new-service-title').value = '';
-            document.getElementById('new-service-desc').value = '';
-        }
-
-        function deleteItem(category, id) {
-            if(confirm('Are you sure you want to delete this?')) {
-                siteData[category] = siteData[category].filter(item => item.id !== id);
-                saveData();
-                if(category === 'skills') renderAdminSkills();
-                if(category === 'projects') renderAdminProjects();
-                if(category === 'services') renderAdminServices();
-            }
-        }
-
-        function updateCredentials() {
-            const newU = document.getElementById('new-admin-user').value;
-            const newP = document.getElementById('new-admin-pass').value;
-            if(newU && newP) {
-                siteData.auth.username = newU;
-                siteData.auth.password = newP;
-                saveData();
-                alert('Credentials updated! Please login again with new details.');
-                logoutAdmin();
-            } else {
-                alert('Please fill both fields.');
-            }
-        }
-
-        function handleFileUpload(event, target) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (target === 'about') {
-                    document.getElementById('edit-about-img-url').value = e.target.result;
-                } else if (target === 'project') {
-                    document.getElementById('new-project-img-base64').value = e.target.result;
-                }
-            };
-            if(file) reader.readAsDataURL(file);
-        }
-
-        // --- ORIGINAL SITE FUNCTIONS ---
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('theme-icon');
-            const currentTheme = body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
-        }
-
-        function toggleMenu() { document.getElementById('nav').classList.toggle('active'); }
-        function closeMenu() { document.getElementById('nav').classList.remove('active'); }
-        
-        // Scroll & Observer
-        const sections = document.querySelectorAll('section');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.15 });
-        sections.forEach(section => observer.observe(section));
-
-        document.getElementById('contactForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            document.getElementById('successMessage').classList.add('show');
-            this.reset();
-            setTimeout(() => { document.getElementById('successMessage').classList.remove('show'); }, 5000);
+    let activeCommandIndex = 0;
+    const renderCommands = (filter = '') => {
+      commandList.innerHTML = '';
+      const filtered = commands.filter(cmd => cmd.label.toLowerCase().includes(filter.toLowerCase()));
+      filtered.forEach((cmd, idx) => {
+        const item = document.createElement('button');
+        item.className = `command-item w-full text-left px-4 py-3 rounded-xl border border-slate-800 text-slate-200 ${idx === activeCommandIndex ? 'active' : ''}`;
+        item.textContent = cmd.label;
+        item.addEventListener('click', () => {
+          cmd.action();
+          closePalette();
         });
+        commandList.appendChild(item);
+      });
+    };
 
-        // Initial Load
-        renderSite();
+    const openPalette = () => {
+      commandOverlay.classList.remove('hidden');
+      commandOverlay.classList.add('flex');
+      commandInput.value = '';
+      activeCommandIndex = 0;
+      renderCommands();
+      setTimeout(() => commandInput.focus(), 50);
+    };
+    const closePalette = () => {
+      commandOverlay.classList.add('hidden');
+      commandOverlay.classList.remove('flex');
+    };
 
-        // Typed Header
-        new Typed('#header-typed', {
-            strings: ['Full-Stack Developer'],
-            typeSpeed: 50,
-            showCursor: false
-        });
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey && e.key.toLowerCase() === 'k') || e.key === '/') {
+        e.preventDefault();
+        openPalette();
+      }
+      if (e.key === 'Escape' && !commandOverlay.classList.contains('hidden')) {
+        closePalette();
+      }
+    });
 
-        // --- ENHANCEMENT FUNCTIONALITY ---
-        // First Visit Intro Animation
-        function initIntroAnimation() {
-            const visited = localStorage.getItem('visited');
-            const introOverlay = document.getElementById('intro-overlay');
-            
-            if (!visited) {
-                // Show intro for first visit
-                setTimeout(() => {
-                    introOverlay.classList.add('hidden');
-                    localStorage.setItem('visited', 'true');
-                }, 3000);
-            } else {
-                // Skip intro for returning visitors
-                introOverlay.style.display = 'none';
-            }
-        }
+    commandInput.addEventListener('input', (e) => {
+      activeCommandIndex = 0;
+      renderCommands(e.target.value);
+    });
 
-        // Cursor Follower
-        function initCursorFollower() {
-            const cursor = document.getElementById('cursor-follower');
-            let mouseX = 0, mouseY = 0;
-            let posX = 0, posY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-            
-            function animateCursor() {
-                posX += (mouseX - posX) / 5;
-                posY += (mouseY - posY) / 5;
-                cursor.style.left = `${posX}px`;
-                cursor.style.top = `${posY}px`;
-                requestAnimationFrame(animateCursor);
-            }
-            
-            animateCursor();
-            
-            // Hover effects
-            const hoverElements = document.querySelectorAll('a, button, .skill-card, .project-card, .service-card');
-            hoverElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
-                    cursor.style.backgroundColor = 'transparent';
-                    cursor.style.border = '1px solid var(--accent)';
-                });
-                
-                el.addEventListener('mouseleave', () => {
-                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                    cursor.style.backgroundColor = 'var(--accent)';
-                    cursor.style.border = 'none';
-                });
-            });
-        }
+    commandInput.addEventListener('keydown', (e) => {
+      const items = Array.from(commandList.children);
+      if (e.key === 'ArrowDown') {
+        activeCommandIndex = (activeCommandIndex + 1) % items.length;
+        renderCommands(commandInput.value);
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowUp') {
+        activeCommandIndex = (activeCommandIndex - 1 + items.length) % items.length;
+        renderCommands(commandInput.value);
+        e.preventDefault();
+      }
+      if (e.key === 'Enter') {
+        items[activeCommandIndex]?.click();
+        e.preventDefault();
+      }
+    });
 
-        // Scroll to Top Button
-        function initScrollToTop() {
-            const scrollTopBtn = document.getElementById('scroll-top');
-            
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > window.innerHeight / 2) {
-                    scrollTopBtn.classList.add('visible');
-                } else {
-                    scrollTopBtn.classList.remove('visible');
-                }
-            });
-            
-            scrollTopBtn.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        }
+    commandOverlay.addEventListener('click', (e) => {
+      if (e.target === commandOverlay) closePalette();
+    });
 
-        // Scroll Progress Indicator
-        function initScrollProgress() {
-            const progressBar = document.getElementById('scroll-progress');
-            
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const docHeight = document.body.scrollHeight - window.innerHeight;
-                const scrollPercent = (scrollTop / docHeight) * 100;
-                progressBar.style.width = `${scrollPercent}%`;
-            });
-        }
-
-        // Dynamic Accent Color System
-        function initAccentColorSystem() {
-            const accentControl = document.getElementById('accent-control');
-            let isDynamic = true;
-            let hue = 0;
-            
-            function updateAccentColor() {
-                if (!isDynamic) return;
-                
-                hue = (hue + 0.5) % 360;
-                const color = `hsl(${hue}, 70%, 60%)`;
-                document.documentElement.style.setProperty('--accent', color);
-                
-                requestAnimationFrame(updateAccentColor);
-            }
-            
-            updateAccentColor();
-            
-            accentControl.addEventListener('click', () => {
-                if (isDynamic) {
-                    isDynamic = false;
-                    accentControl.innerHTML = '<i class="fas fa-lock"></i>';
-                    accentControl.title = "Accent color locked";
-                } else {
-                    isDynamic = true;
-                    accentControl.innerHTML = '<i class="fas fa-palette"></i>';
-                    accentControl.title = "Accent color control";
-                    updateAccentColor();
-                }
-            });
-        }
-
-        // Command Palette
-        function initCommandPalette() {
-            const palette = document.getElementById('command-palette');
-            const overlay = document.getElementById('palette-overlay');
-            const searchInput = document.getElementById('palette-search');
-            const resultsContainer = document.getElementById('palette-results');
-            
-            // Commands data
-            const commands = [
-                { id: 'home', title: 'Go to Home', icon: 'fas fa-home', action: () => scrollToSection('home') },
-                { id: 'about', title: 'Go to About', icon: 'fas fa-user', action: () => scrollToSection('about') },
-                { id: 'skills', title: 'Go to Skills', icon: 'fas fa-code', action: () => scrollToSection('skills') },
-                { id: 'projects', title: 'Go to Projects', icon: 'fas fa-folder', action: () => scrollToSection('projects') },
-                { id: 'services', title: 'Go to Services', icon: 'fas fa-tools', action: () => scrollToSection('services') },
-                { id: 'contact', title: 'Go to Contact', icon: 'fas fa-envelope', action: () => scrollToSection('contact') },
-                { id: 'theme', title: 'Toggle Theme', icon: 'fas fa-moon', action: toggleTheme },
-                { id: 'top', title: 'Scroll to Top', icon: 'fas fa-arrow-up', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) }
-            ];
-            
-            function scrollToSection(id) {
-                const section = document.getElementById(id);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                    hidePalette();
-                }
-            }
-            
-            function showPalette() {
-                palette.classList.add('visible');
-                overlay.classList.add('visible');
-                searchInput.focus();
-                renderResults(commands);
-            }
-            
-            function hidePalette() {
-                palette.classList.remove('visible');
-                overlay.classList.remove('visible');
-                searchInput.value = '';
-            }
-            
-            function renderResults(results) {
-                resultsContainer.innerHTML = '';
-                results.forEach((cmd, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'palette-item';
-                    item.innerHTML = `
-                        <i class="${cmd.icon}"></i>
-                        <span>${cmd.title}</span>
-                    `;
-                    item.addEventListener('click', cmd.action);
-                    resultsContainer.appendChild(item);
-                });
-            }
-            
-            // Event listeners
-            document.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    showPalette();
-                } else if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    showPalette();
-                } else if (e.key === 'Escape') {
-                    hidePalette();
-                }
-            });
-            
-            overlay.addEventListener('click', hidePalette);
-            
-            searchInput.addEventListener('input', () => {
-                const term = searchInput.value.toLowerCase();
-                const filtered = commands.filter(cmd => 
-                    cmd.title.toLowerCase().includes(term)
-                );
-                renderResults(filtered);
-            });
-        }
-
-        // Text Animations
-        function initTextAnimations() {
-            const animateElements = document.querySelectorAll('.animate-text');
-            const textObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            animateElements.forEach(el => textObserver.observe(el));
-        }
-
-        // Particles Background
-        function initParticles() {
-            if (typeof particlesJS !== 'undefined') {
-                particlesJS('particles-js', {
-                    particles: {
-                        number: { value: 30, density: { enable: true, value_area: 800 } },
-                        color: { value: "#3b82f6" },
-                        shape: { type: "circle" },
-                        opacity: { value: 0.1, random: true },
-                        size: { value: 3, random: true },
-                        line_linked: {
-                            enable: true,
-                            distance: 150,
-                            color: "#3b82f6",
-                            opacity: 0.1,
-                            width: 1
-                        },
-                        move: {
-                            enable: true,
-                            speed: 1,
-                            direction: "none",
-                            random: true,
-                            straight: false,
-                            out_mode: "out",
-                            bounce: false
-                        }
-                    },
-                    interactivity: {
-                        detect_on: "canvas",
-                        events: {
-                            onhover: { enable: true, mode: "grab" },
-                            onclick: { enable: true, mode: "push" },
-                            resize: true
-                        }
-                    },
-                    retina_detect: true
-                });
-            }
-        }
-
-        // Initialize all enhancements
-        document.addEventListener('DOMContentLoaded', () => {
-            initIntroAnimation();
-            initCursorFollower();
-            initScrollToTop();
-            initScrollProgress();
-            initAccentColorSystem();
-            initCommandPalette();
-            initTextAnimations();
-            initParticles();
-        });
-    </script>
-    <script>
-        fetch("http://127.0.0.1:5000/data")
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(item => {
-            const el = document.getElementById(item.key);
-            if (el) el.innerText = item.value;
-            });
-        });
-    </script>
-
+    // Intro animation
+    const introOverlay = document.getElementById('introOverlay');
+    const introSeenKey = 'dpcs-intro-seen';
+    if (localStorage.getItem(introSeenKey)) {
+      introOverlay.classList.add('hide');
+      setTimeout(() => introOverlay.remove(), 700);
+    } else {
+      setTimeout(() => {
+        introOverlay.classList.add('hide');
+        localStorage.setItem(introSeenKey, 'true');
+        setTimeout(() => introOverlay.remove(), 700);
+      }, 1600);
+    }
+  </script>
 </body>
 </html>
