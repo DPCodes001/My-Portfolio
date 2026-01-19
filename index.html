@@ -193,46 +193,62 @@
     <h2 id="contactTitle" class="text-3xl font-bold mb-2 reveal">Let’s Build Something Together</h2>
     <p id="contactSubtitle" class="text-slate-400 mb-8 reveal">Have an idea or project in mind? Fill out the form below and let’s get started.</p>
     <form id="contactForm" class="grid gap-6 md:grid-cols-2 reveal">
-      <div class="md:col-span-2">
-        <label class="block text-sm mb-2">Full Name</label>
-        <input type="text" placeholder="Enter your full name" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
-      </div>
-      <div class="md:col-span-2">
-        <label class="block text-sm mb-2">Email Address</label>
-        <input type="email" placeholder="Enter your email address" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
-      </div>
-      <div>
-        <label class="block text-sm mb-2">Project Type</label>
-        <select class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
-          <option>Select project type</option>
-          <option>Portfolio Website</option>
-          <option>Business Website</option>
-          <option>Web Application</option>
-          <option>Dashboard</option>
-          <option>School Project</option>
-          <option>Custom Software</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm mb-2">Budget Range</label>
-        <select class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
-          <option>Select budget range</option>
-          <option>$500 – $1,000</option>
-          <option>$1,000 – $1,500</option>
-          <option>$1,500 – $3,000</option>
-          <option>$3,000 – $5,000</option>
-          <option>$5,000 – $10,000+</option>
-        </select>
-      </div>
-      <div class="md:col-span-2">
-        <label class="block text-sm mb-2">Message</label>
-        <textarea rows="5" placeholder="Tell me about your project, goals, and expectations." class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700"></textarea>
-      </div>
-      <div class="md:col-span-2">
-        <button type="submit" class="px-6 py-3 bg-teal-500 text-slate-950 font-semibold rounded-lg">Send Message</button>
-      </div>
-      <p id="contactSuccess" class="hidden md:col-span-2 text-teal-400">Thank you for reaching out! I’ll get back to you as soon as possible.</p>
-    </form>
+
+    <div class="md:col-span-2">
+      <label class="block text-sm mb-2">Full Name</label>
+      <input name="from_name" type="text" required
+        placeholder="Enter your full name"
+        class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="block text-sm mb-2">Email Address</label>
+      <input name="from_email" type="email" required
+        placeholder="Enter your email address"
+        class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700" />
+    </div>
+
+    <div>
+      <label class="block text-sm mb-2">Project Type</label>
+      <select name="project_type" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
+        <option>Portfolio Website</option>
+        <option>Business Website</option>
+        <option>Web Application</option>
+        <option>Dashboard</option>
+        <option>School Project</option>
+        <option>Custom Software</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm mb-2">Budget Range</label>
+      <select name="budget" class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700">
+        <option>$500 – $1,000</option>
+        <option>$1,000 – $1,500</option>
+        <option>$1,500 – $3,000</option>
+        <option>$3,000 – $5,000</option>
+        <option>$5,000 – $10,000+</option>
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="block text-sm mb-2">Message</label>
+      <textarea name="message" rows="5" required
+        placeholder="Tell me about your project"
+        class="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-700"></textarea>
+    </div>
+
+    <div class="md:col-span-2">
+      <button type="submit"
+        class="px-6 py-3 bg-teal-500 text-slate-950 font-semibold rounded-lg">
+        Send Message
+      </button>
+    </div>
+
+    <p id="contactSuccess" class="hidden md:col-span-2 text-teal-400">
+      Message sent successfully ✅
+    </p>
+  </form>
   </section>
 
   <!-- Footer -->
@@ -1221,5 +1237,34 @@
       }, 1600);
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <script>
+    (function () {
+      emailjs.init("cFc9Nk0sL3EdGKcNG"); // 👈 replace
+    })();
+
+    const contactForm = document.getElementById("contactForm");
+    const successMsg = document.getElementById("contactSuccess");
+
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      emailjs.sendForm(
+        "service_fyxjikh",   // 👈 replace
+        "template_lgp82a3",  // 👈 replace
+        this
+      )
+      .then(() => {
+        successMsg.classList.remove("hidden");
+        contactForm.reset();
+      })
+      .catch((error) => {
+        alert("Failed to send message ❌");
+        console.error(error);
+      });
+    });
+  </script>
+
 </body>
 </html>

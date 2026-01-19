@@ -1,58 +1,41 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-import sqlite3
-import os
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__)
 CORS(app)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_NAME = os.path.join(BASE_DIR, "portfolio.db")
+EMAIL_ADDRESS = "ayomidepeculiar82@gmail.com"
+EMAIL_PASSWORD = "Oluwaseun 1....."
 
-def get_db():
-    conn = sqlite3.connect(DB_NAME)
-    conn.row_factory = sqlite3.Row
-    return conn
+@app.route("/contact", methods=["POST"])
+def contact():
+    data = request.json
 
+    msg = EmailMessage()
+    msg["Subject"] = f"New Portfolio Message — {data['name']}"
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = EMAIL_ADDRESS
 
-# -------- PUBLIC ROUTE --------
-@app.route("/data", methods=["GET"])
-def get_data():
-    db = get_db()
+    msg.set_content(f"""
+Name: {data['name']}
+Email: {data['email']}
+Project Type: {data['project']}
+Budget: {data['budget']}
 
-    # TODO 1:
-    # fetch ALL rows from the "content" table
-    rows = db.execute("SELECT * FROM content").fetchall()
+Message:
+{data['message']}
+""")
 
-    # TODO 2:
-    # convert rows into a list of dictionaries
-    data = [dict(row) for row in rows]
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.send_message(msg)
 
-    return jsonify(data)
-
-
-# -------- ADMIN ROUTE --------
-@app.route("/update", methods=["POST"])
-def update_data():
-    body = request.json
-
-    # TODO 3:
-    # read "key" and "value" from body
-    key = body["key"]
-    value = body["value"]
-
-    db = get_db()
-
-    # TODO 4:
-    # update the content table where key matches
-    db.execute(
-        "UPDATE content SET value = ? WHERE key = ?",
-        (value, key)
-    )
-
-    db.commit()
-    return jsonify({"status": "updated"})
-
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
