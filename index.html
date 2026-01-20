@@ -93,6 +93,12 @@
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("cFc9Nk0sL3EdGKcNG");
+    })();
+  </script>
   <canvas id="bgCanvas"></canvas>
   <div class="fixed top-0 left-0 w-full h-1 z-50">
     <div id="scrollProgress" class="h-full w-0"></div>
@@ -621,13 +627,32 @@
       }
     }
 
-    // Contact form
+    // Contact form (EmailJS)
     const contactForm = document.getElementById('contactForm');
-    contactForm.addEventListener('submit', (e) => {
+    const successMsg = document.getElementById('contactSuccess');
+
+    contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      document.getElementById('contactSuccess').classList.remove('hidden');
-      contactForm.reset();
+
+      emailjs.sendForm(
+        'service_fyxjikh',
+        'template_lgp82a3',
+        this
+      )
+      .then(() => {
+        successMsg.classList.remove('hidden');
+        contactForm.reset();
+
+        setTimeout(() => {
+          successMsg.classList.add('hidden');
+        }, 4000);
+      })
+      .catch((error) => {
+        alert('Message failed. Please try again.');
+        console.error(error);
+      });
     });
+
 
     // Admin Panel
     const adminOverlay = document.getElementById('adminOverlay');
@@ -1238,7 +1263,6 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
   <script>
     (function () {
       emailjs.init("cFc9Nk0sL3EdGKcNG"); // 👈 replace
