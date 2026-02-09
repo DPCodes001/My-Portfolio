@@ -275,13 +275,13 @@
       </div>
 
       <!-- Login Screen -->
-      <div id="adminLogin" class="space-y-4">
+      <!-- <div id="adminLogin" class="space-y-4">
         <h4 class="text-lg font-semibold">Admin Login</h4>
         <input id="adminUsername" type="text" placeholder="Username" class="w-full px-4 py-2 rounded-lg admin-input" />
         <input id="adminPassword" type="password" placeholder="Password" class="w-full px-4 py-2 rounded-lg admin-input" />
         <button id="adminLoginBtn" class="w-full px-4 py-2 bg-teal-500 text-slate-950 font-semibold rounded-lg">Admin Unlock 🔑</button>
         <p id="adminLoginError" class="text-red-400 hidden">Invalid credentials. Try again.</p>
-      </div>
+      </div> -->
 
       <!-- Dashboard -->
       <div id="adminDashboard" class="hidden">
@@ -291,7 +291,7 @@
           <button class="admin-tab px-3 py-2 rounded-lg" data-tab="projects">Projects Manager</button>
           <button class="admin-tab px-3 py-2 rounded-lg" data-tab="skills">Skills Manager</button>
           <button class="admin-tab px-3 py-2 rounded-lg" data-tab="services">Services Manager</button>
-          <button class="admin-tab px-3 py-2 rounded-lg" data-tab="auth">Change Login</button>
+          <!-- <button class="admin-tab px-3 py-2 rounded-lg" data-tab="auth">Change Login</button> -->
           <button id="adminLogout" class="ml-auto px-3 py-2 rounded-lg bg-red-500 text-white">Logout</button>
         </div>
 
@@ -510,17 +510,18 @@
         { id: Date.now() + 25, title: 'Custom Software Solutions', desc: 'Tailored software built to solve specific problems or workflows.' }
       ]
     };
-
-    const defaultAuth = { username: 'Mo_Peculiar', password: 'Oluwaseun 1.....' };
-
     const storageKey = 'dpcs-portfolio-data';
-    const authKey = 'dpcs-portfolio-auth';
-
     const state = JSON.parse(localStorage.getItem(storageKey)) || defaultData;
-    const authState = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
-
     const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
-    const saveAuth = () => localStorage.setItem(authKey, JSON.stringify(authState));
+
+    // const storageKey = 'dpcs-portfolio-data';
+    // const authKey = 'dpcs-portfolio-auth';
+
+    // const state = JSON.parse(localStorage.getItem(storageKey)) || defaultData;
+    // const authState = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
+
+    // const saveState = () => localStorage.setItem(storageKey, JSON.stringify(state));
+    // const saveAuth = () => localStorage.setItem(authKey, JSON.stringify(authState));
 
     const logoEl = document.getElementById('logo');
     const footerLogo = document.getElementById('footerLogo');
@@ -657,10 +658,7 @@
     // Admin Panel
     const adminOverlay = document.getElementById('adminOverlay');
     const adminClose = document.getElementById('adminClose');
-    const adminLogin = document.getElementById('adminLogin');
     const adminDashboard = document.getElementById('adminDashboard');
-    const adminLoginBtn = document.getElementById('adminLoginBtn');
-    const adminLoginError = document.getElementById('adminLoginError');
     const adminLogout = document.getElementById('adminLogout');
 
     let logoClicks = 0;
@@ -676,37 +674,35 @@
     });
 
     function openAdmin() {
-      adminOverlay.classList.remove('hidden');
-      adminOverlay.classList.add('flex');
-      adminLogin.classList.remove('hidden');
-      adminDashboard.classList.add('hidden');
-      adminLoginError.classList.add('hidden');
-      document.getElementById('adminUsername').value = '';
-      document.getElementById('adminPassword').value = '';
+    adminOverlay.classList.remove('hidden');
+    adminOverlay.classList.add('flex');
+    adminDashboard.classList.remove('hidden');
     }
+
 
     adminClose.addEventListener('click', () => {
       adminOverlay.classList.add('hidden');
       adminOverlay.classList.remove('flex');
     });
 
-    adminLoginBtn.addEventListener('click', () => {
-      const user = document.getElementById('adminUsername').value.trim();
-      const pass = document.getElementById('adminPassword').value.trim();
-      const stored = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
-      if (user === stored.username && pass === stored.password) {
-        adminLogin.classList.add('hidden');
-        adminDashboard.classList.remove('hidden');
-        loadAdminInputs();
-      } else {
-        adminLoginError.classList.remove('hidden');
-      }
-    });
+    // adminLoginBtn.addEventListener('click', () => {
+    //   const user = document.getElementById('adminUsername').value.trim();
+    //   const pass = document.getElementById('adminPassword').value.trim();
+    //   const stored = JSON.parse(localStorage.getItem(authKey)) || defaultAuth;
+    //   if (user === stored.username && pass === stored.password) {
+    //     adminLogin.classList.add('hidden');
+    //     adminDashboard.classList.remove('hidden');
+    //     loadAdminInputs();
+    //   } else {
+    //     adminLoginError.classList.remove('hidden');
+    //   }
+    // });
 
     adminLogout.addEventListener('click', () => {
-      adminDashboard.classList.add('hidden');
-      adminLogin.classList.remove('hidden');
+      adminOverlay.classList.add('hidden');
+      adminOverlay.classList.remove('flex');
     });
+
 
     document.querySelectorAll('.admin-tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -1146,24 +1142,32 @@
     });
 
     const drawParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        const dx = (bgMouse.x - p.x) * 0.0004;
-        const dy = (bgMouse.y - p.y) * 0.0004;
-        p.x += dx;
-        p.y += dy;
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      requestAnimationFrame(drawParticles);
-    };
-    drawParticles();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      // subtle mouse interaction
+      const dx = (bgMouse.x - p.x) * 0.0004;
+      const dy = (bgMouse.y - p.y) * 0.0004;
+      p.vx += dx;
+      p.vy += dy;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
+      ctx.fill();
+    });
+
+    requestAnimationFrame(drawParticles);
+  };
+
+  drawParticles();
+
 
     // Command palette
     const commandOverlay = document.getElementById('commandPaletteOverlay');
@@ -1262,33 +1266,58 @@
       }, 1600);
     }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function () {
-      emailjs.init("cFc9Nk0sL3EdGKcNG"); // 👈 replace
-    })();
+  <!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    const contactForm = document.getElementById("contactForm");
-    const successMsg = document.getElementById("contactSuccess");
+<script>
+  // Initialize EmailJS (PUT YOUR PUBLIC KEY HERE)
+  (function () {
+    emailjs.init('cFc9Nk0sL3EdGKcNG'); // e.g. 'zXyAbC123456'
+  })();
 
-    contactForm.addEventListener("submit", function (e) {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Contact form (EmailJS)
+    const contactForm = document.getElementById('contactForm');
+    const successMsg = document.getElementById('contactSuccess');
+
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
+      // Button state
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
       emailjs.sendForm(
-        "service_fyxjikh",   // 👈 replace
-        "template_lgp82a3",  // 👈 replace
-        this
+        'service_fyxjikh',     // Service ID
+        'template_lgp82a3',    // Template ID
+        this                  // Form element
       )
       .then(() => {
-        successMsg.classList.remove("hidden");
+        successMsg.classList.remove('hidden');
         contactForm.reset();
+
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+
+        setTimeout(() => {
+          successMsg.classList.add('hidden');
+        }, 4000);
       })
       .catch((error) => {
-        alert("Failed to send message ❌");
-        console.error(error);
+        alert('Message failed. Please try again.');
+        console.error('EmailJS Error:', error);
+
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
       });
     });
-  </script>
+  });
+</script>
+
 
 </body>
 </html>
